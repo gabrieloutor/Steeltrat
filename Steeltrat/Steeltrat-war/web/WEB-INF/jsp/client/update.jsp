@@ -28,7 +28,7 @@
             <label for="telephone_client">Telefone:</label> <input type="number" readonly name="telephone_client" id="telephone_client" size="30" maxlength="19">
             <br>
             <label for="addresses">Endereços:&nbsp;</label>
-            <select name="addresses" id="addresses">
+            <select name="addresses" id="addresses" disabled>
                 <option value="">&#45;&#45; Selecione um C.E.P. &#45;&#45;</option>
                 <c:forEach var="address" items="${addresses}">
                     <option value="${address.idAddress}">
@@ -57,6 +57,8 @@
                         name_client.removeAttribute("readonly");
                         telephone_client.value = "${client.telephone}";
                         telephone_client.removeAttribute("readonly");
+                        addresses.value = "${client.idAddress.idAddress}";
+                        addresses.removeAttribute("disabled");
                     }
             </c:forEach>
                 } else {
@@ -64,6 +66,8 @@
                     name_client.setAttribute("readonly");
                     telephone_client.value = "";
                     telephone_client.setAttribute("readonly");
+                    addresses.value = "";
+                    addresses.setAttribute("disabled");
                 }
             }
             function myFunction() {
