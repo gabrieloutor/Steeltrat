@@ -15,10 +15,10 @@
         <form method="POST" id="formInsert" action="home" >
             <label for="name_client">Nome Cliente:</label> <input type="text" name="name_client" id="name_client" size="30" onchange="myFunctionTwo()">
             <br>
-            <label for="telephone_client">Telefone Cliente:</label> <input type="tel" readonly name="telephone_client" id="telephone_client" size="30">
+            <label for="telephone_client">Telefone Cliente:</label> <input type="number" readonly name="telephone_client" id="telephone_client" size="30" maxlength="19">
             <br>
             <label for="addresses">Endereços:&nbsp;</label>
-            <select name="addresses" id="addresses">
+            <select name="addresses" id="addresses" disabled>
                 <option value="">&#45;&#45; Selecione um C.E.P. &#45;&#45;</option>
                 <c:forEach var="address" items="${addresses}">
                     <option value="${address.idAddress}">
@@ -60,15 +60,19 @@
             }
             function myFunctionTwo() {
                 var name_client = document.getElementById("name_client");
+                var addresses = document.getElementById("addresses");
                 var telephone_client = document.getElementById("telephone_client");
 
                 switch (true) {
                     case name_client.value !== "":
                         telephone_client.removeAttribute("readonly");
+                        addresses.removeAttribute("disabled");
                         break;
                     case name_client.value === "":
                         telephone_client.value = "";
                         telephone_client.setAttribute("readonly");
+                        addresses.value = "";
+                        addresses.setAttribute("disabled");
                         break;
                 }
             }

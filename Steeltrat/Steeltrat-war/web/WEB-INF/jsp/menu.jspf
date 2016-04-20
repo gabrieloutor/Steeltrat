@@ -4,7 +4,7 @@
             <ul class="menu-list">
         <c:choose>
             <c:when test="${employee.idPosition.idPosition==1}"> <%-- ADMINISTRADOR --%>
-                <li class="${pageContext.request.servletPath.equals("/WEB-INF/jsp/position/read.jsp")?"selectedMenu":""}">
+                <li>
                     <a href="home?command=Position&action=read">Cargo</a>
                     <ul class="sub-menu">
                         <li><a href="home?command=Position&action=update">alterar</a></li>
