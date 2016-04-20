@@ -1,0 +1,5 @@
+<section id="black-bar">
+            <a href="home?command=Home"><img id="homePage" src="img/logos/logosteel.jpg" alt="HomePage"></a>
+            <h1>BEM VINDO ${employee.nameEmployee} | CARGO: ${employee.idPosition.namePosition}</h1>
+            <a href="home?command=User&action=logout"><img id="logout" src="img/logout/logout.png" alt="Logout"></a>
+        </section>

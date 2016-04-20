@@ -1,0 +1,167 @@
+*, *:after, *:before{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+    font-size: 14px;
+    line-height: 1.5;
+}
+.menu{
+    background: #222;
+    font-family: "Roboto Slab", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.menu .menu-list, .menu .sub-menu{
+    list-style: none;
+}
+.menu a{
+    color: #007cd2;
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing:0.2em;
+}
+.menu > .menu-list > li{
+    float: left;
+    position: relative;
+}
+.menu > .menu-list > li > a {
+    padding: 20px;
+    margin: 0 5px;
+    background: #222;
+}
+.menu > .menu-list > li:hover a {
+    background: #222;
+    color: #fff;
+}
+.menu > .menu-list > li:hover > .sub-menu {
+    display: block;
+    background: #007cd2;
+}
+.menu > .menu-list > li > .sub-menu {
+    position: absolute;
+    top: 50px;
+    left: 5px;
+    background: #222;
+    min-width: 200px;
+    z-index: 1000;
+    display: none;
+}
+.menu > .menu-list > li > .sub-menu > li > a {
+    padding: 10px 20px;
+}
+.menu > .menu-list > li > .sub-menu > li:hover > a {
+    padding: 10px 20px;
+    background: #007cd2;
+    color: #fff;
+}
+.menu:after {
+    content: '.';
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+}
+#black-bar{
+    background-color: #007cd2;
+}
+#black-bar #homePage{
+    position:relative;
+    width:70px;
+    float:left;
+    height:45px;
+    background-repeat: no-repeat;
+}
+
+
+#black-bar h1 { 
+    color: #fff; 
+    font-family: 'Bitter', serif;
+    font-size: 30px; 
+    font-weight: normal;
+    margin-top: 0; 
+    text-shadow: 0 1px 1px #000000; 
+    text-transform: uppercase;
+    left: 80px;
+    height: auto;
+}
+
+#black-bar #logout{
+    float:right;
+    height: 40px;
+    width: auto;
+    position: initial;
+    margin-top: -40px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select,
+input[type="password"]{
+    line-height: 1px;
+    border: solid 1px #ccc;
+    transition: box-shadow 0.3s, border 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="text"].focus,
+input[type="number"]:focus,
+input[type="number"].focus,
+input[type="date"]:focus,
+input[type="date"].focus,
+select:focus,
+select.focus,
+input[type="password"]:focus,
+input[type="password"].focus{
+    border: solid 1px #ccc;
+    box-shadow: 0 0 3px 1px #969696;
+}
+
+input[type="button"]{
+    font-size: 16px;
+    background: #007cd2;
+    border-radius: 3px;
+    border-color: #fff;
+    color:#fff;
+    font-weight: 700;
+    text-align: center;
+    background-color: #007cd2;
+    text-transform: uppercase;
+    padding: 10px auto;
+    box-sizing: border-box;
+}
+
+input[type="button"]:hover, 
+input[type="button"]:focus {
+    background-color: #64AFF0;
+    border-color: #fff;
+    color: #fff;
+}
+
+input[type="button"]:active {
+    border-bottom: 1px solid;
+}
+#msg {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-weight: bold;
+}
+table {
+    border-collapse: collapse;
+}
+
+table, td, th {
+    border: 1px solid black;
+}
+.selectedMenu{
+    color:#FFF;
+}

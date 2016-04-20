@@ -1,0 +1,185 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<nav class="menu">
+            <ul class="menu-list">
+        <c:choose>
+            <c:when test="${employee.idPosition.idPosition==1}"> <%-- ADMINISTRADOR --%>
+                <li class="${pageContext.request.servletPath.equals("/WEB-INF/jsp/position/read.jsp")?"selectedMenu":""}">
+                    <a href="home?command=Position&action=read">Cargo</a>
+                    <ul class="sub-menu">
+                        <li><a href="home?command=Position&action=update">alterar</a></li>
+                        <li><a href="home?command=Position&action=insert">inserir</a></li>
+                        <li><a href="home?command=Position&action=delete">remover</a></li>
+                        <li><a href="home?command=Position&action=read">visualizar</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="home?command=Client&action=read">Cliente</a>
+                    <ul class="sub-menu">
+                        <li><a href="home?command=Client&action=update">alterar</a></li>
+                        <li><a href="home?command=Client&action=insert">inserir</a></li>
+                        <li><a href="home?command=Client&action=delete">remover</a></li>
+                        <li><a href="home?command=Client&action=read">visualizar</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="home?command=Departament&action=read">Departamento</a>
+                    <ul class="sub-menu">
+                        <li><a href="home?command=Departament&action=update">alterar</a></li>
+                        <li><a href="home?command=Departament&action=insert">inserir</a></li>
+                        <li><a href="home?command=Departament&action=delete">remover</a></li>
+                        <li><a href="home?command=Departament&action=read">visualizar</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="home?command=Address&action=read">Endereço</a>
+                    <ul class="sub-menu">
+                        <li><a href="home?command=Address&action=update">alterar</a></li>
+                        <li><a href="home?command=Address&action=insert">inserir</a></li>
+                        <li><a href="home?command=Address&action=delete">remover</a></li>
+                        <li><a href="home?command=Address&action=read">visualizar</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="home?command=Employee&action=read">Funcionário</a>
+                    <ul class="sub-menu">
+                        <li><a href="home?command=Employee&action=update">alterar</a></li>
+                        <li><a href="home?command=Employee&action=insert">inserir</a></li>
+                        <li><a href="home?command=Employee&action=delete">remover</a></li>
+                        <li><a href="home?command=Employee&action=read">visualizar</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="home?command=ItemsReceipt&action=read">Item Recebimento</a>
+                    <ul class="sub-menu">
+                        <li><a href="home?command=ItemsReceipt&action=update">alterar</a></li>
+                        <li><a href="home?command=ItemsReceipt&action=insert">inserir</a></li>
+                        <li><a href="home?command=ItemsReceipt&action=delete">remover</a></li>
+                        <li><a href="home?command=ItemsReceipt&action=read">visualizar</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="home?command=Material&action=read">Material</a>
+                    <ul class="sub-menu">
+                        <li><a href="home?command=Material&action=update">alterar</a></li>
+                        <li><a href="home?command=Material&action=insert">inserir</a></li>
+                        <li><a href="home?command=Material&action=delete">remover</a></li>
+                        <li><a href="home?command=Material&action=read">visualizar</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="home?command=Standard&action=read">Norma</a>
+                    <ul class="sub-menu">
+                        <li><a href="home?command=Standard&action=update">alterar</a></li>
+                        <li><a href="home?command=Standard&action=insert">inserir</a></li>
+                        <li><a href="home?command=Standard&action=delete">remover</a></li>
+                        <li><a href="home?command=Standard&action=read">visualizar</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="home?command=Product&action=read">Produto</a>
+                    <ul class="sub-menu">
+                        <li><a href="home?command=Product&action=update">alterar</a></li>
+                        <li><a href="home?command=Product&action=insert">inserir</a></li>
+                        <li><a href="home?command=Product&action=delete">remover</a></li>
+                        <li><a href="home?command=Product&action=read">visualizar</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="home?command=Receipt&action=read">Recebimento</a>
+                    <ul class="sub-menu">
+                        <li><a href="home?command=Receipt&action=update">alterar</a></li>
+                        <li><a href="home?command=Receipt&action=insert">inserir</a></li>
+                        <li><a href="home?command=Receipt&action=delete">remover</a></li>
+                        <li><a href="home?command=Receipt&action=read">visualizar</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="home?command=User&action=read">Usuário</a>
+                    <ul class="sub-menu">
+                        <li><a href="home?command=User&action=update">alterar</a></li>
+                        <li><a href="home?command=User&action=insert">inserir</a></li>
+                        <li><a href="home?command=User&action=delete">remover</a></li>
+                        <li><a href="home?command=User&action=read">visualizar</a></li>
+                    </ul>
+                </li>
+            </c:when>
+            <c:when test="${employee.idPosition.idPosition==2}"> <%-- AUXILIAR EXPEDIÇÃO--%>
+                <li>
+                    <a href="home?command=ItemsReceipt&action=read">Item Recebimento</a>
+                    <ul class="sub-menu">
+                        <li><a href="home?command=ItemsReceipt&action=insert">inserir</a></li>
+                        <li><a href="home?command=ItemsReceipt&action=read">visualizar</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="home?command=Receipt&action=read">Recebimento</a>
+                    <ul class="sub-menu">
+                        <li><a href="home?command=Receipt&action=insert">inserir</a></li>
+                        <li><a href="home?command=Receipt&action=read">visualizar</a></li>
+                    </ul>
+                </li>
+            </c:when>
+            <c:when test="${employee.idPosition.idPosition==3}"> <%-- AUXILIAR COMPRAS--%>
+
+            </c:when>
+            <c:when test="${employee.idPosition.idPosition==4}"> <%-- GERENTE EXPEDIÇÃO--%>
+                <li>
+                    <a href="home?command=ItemsReceipt&action=read">Item Recebimento</a>
+
+                    <ul class="sub-menu">
+                        <li><a href="home?command=ItemsReceipt&action=update">alterar</a></li>
+                        <li><a href="home?command=ItemsReceipt&action=insert">inserir</a></li>
+                        <li><a href="home?command=ItemsReceipt&action=delete">remover</a></li>
+                        <li><a href="home?command=ItemsReceipt&action=read">visualizar</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="home?command=Material&action=read">Material</a>
+                    <ul class="sub-menu">
+                        <li><a href="home?command=Material&action=update">alterar</a></li>
+                        <li><a href="home?command=Material&action=insert">inserir</a></li>
+                        <li><a href="home?command=Material&action=delete">remover</a></li>
+                        <li><a href="home?command=Material&action=read">visualizar</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="home?command=Standard&action=read">Norma</a>
+                    <ul class="sub-menu">
+                        <li><a href="home?command=Standard&action=update">alterar</a></li>
+                        <li><a href="home?command=Standard&action=insert">inserir</a></li>
+                        <li><a href="home?command=Standard&action=delete">remover</a></li>
+                        <li><a href="home?command=Standard&action=read">visualizar</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="home?command=Product&action=read">Produto</a>
+                    <ul class="sub-menu">
+                        <li><a href="home?command=Product&action=update">alterar</a></li>
+                        <li><a href="home?command=Product&action=insert">inserir</a></li>
+                        <li><a href="home?command=Product&action=delete">remover</a></li>
+                        <li><a href="home?command=Product&action=read">visualizar</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="home?command=Receipt&action=read">Recebimento</a>
+                    <ul class="sub-menu">
+                        <li><a href="home?command=Receipt&action=update">alterar</a></li>
+                        <li><a href="home?command=Receipt&action=insert">inserir</a></li>
+                        <li><a href="home?command=Receipt&action=delete">remover</a></li>
+                        <li><a href="home?command=Receipt&action=read">visualizar</a></li>
+                    </ul>
+                </li>
+            </c:when>
+            <c:when test="${employee.idPosition.idPosition==5}"> <%-- GERENTE COMPRAS--%>
+
+            </c:when>
+            <c:when test="${employee.idPosition.idPosition==6}"> <%-- GERENTE GERAL--%>
+
+            </c:when>
+            <c:otherwise>
+                <c:redirect url="index.jsp"></c:redirect>
+            </c:otherwise>
+        </c:choose>
+            </ul>
+        </nav>
