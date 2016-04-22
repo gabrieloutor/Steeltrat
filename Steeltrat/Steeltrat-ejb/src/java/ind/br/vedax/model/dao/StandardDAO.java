@@ -1,5 +1,8 @@
 package ind.br.vedax.model.dao;
 
+import ind.br.vedax.exceptions.DBException;
+import ind.br.vedax.exceptions.DBExceptionEnum;
+import ind.br.vedax.model.entities.Standard;
 import ind.br.vedax.model.entities.Standard;
 import java.util.List;
 import javax.ejb.LocalBean;
@@ -18,22 +21,38 @@ public class StandardDAO implements GenericDAO<Standard>{
     
     @Override
     public void create(Standard e) {
-        em.persist(e);
+        try {
+            em.persist(e);
+        } catch (Exception ex) {
+            throw new DBException(DBExceptionEnum.PERSIST_ERROR);
+        }
     }
 
     @Override
     public List<Standard> read() {
-        return em.createNamedQuery("Standard.findAll", Standard.class).getResultList();
+        List<Standard> lista = em.createNamedQuery("Standard.findAll", Standard.class).getResultList();
+        if (lista == null || lista.isEmpty()) {
+            throw new DBException(DBExceptionEnum.FIND_ERROR);
+        }
+        return lista;
     }
 
     @Override
     public void delete(Standard e) {
-        em.remove(e);
+        try {
+            em.remove(e);
+        } catch (Exception ex) {
+            throw new DBException(DBExceptionEnum.REMOVE_ERROR);
+        }
     }
     
     @Override
     public Standard readById(Long id){
-        return em.find(Standard.class, id);
+        Standard e = em.find(Standard.class, id);
+        if (e == null) {
+            throw new DBException(DBExceptionEnum.FIND_ERROR);
+        }
+        return e;
     }
     
     @Override

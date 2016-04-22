@@ -1,5 +1,8 @@
 package ind.br.vedax.model.dao;
 
+import ind.br.vedax.exceptions.DBException;
+import ind.br.vedax.exceptions.DBExceptionEnum;
+import ind.br.vedax.model.entities.UserSteeltrat;
 import ind.br.vedax.model.entities.UserSteeltrat;
 import java.util.List;
 import javax.ejb.LocalBean;
@@ -19,22 +22,38 @@ public class UserSteeltratDAO implements GenericDAO<UserSteeltrat>{
     
     @Override
     public void create(UserSteeltrat e) {
-        em.persist(e);
+        try {
+            em.persist(e);
+        } catch (Exception ex) {
+            throw new DBException(DBExceptionEnum.PERSIST_ERROR);
+        }
     }
 
     @Override
     public List<UserSteeltrat> read() {
-        return em.createNamedQuery("UserSteeltrat.findAll", UserSteeltrat.class).getResultList();
+        List<UserSteeltrat> lista = em.createNamedQuery("UserSteeltrat.findAll", UserSteeltrat.class).getResultList();
+        if (lista == null || lista.isEmpty()) {
+            throw new DBException(DBExceptionEnum.FIND_ERROR);
+        }
+        return lista;
     }
 
     @Override
     public void delete(UserSteeltrat e) {
-        em.remove(e);
+        try {
+            em.remove(e);
+        } catch (Exception ex) {
+            throw new DBException(DBExceptionEnum.REMOVE_ERROR);
+        }
     }
     
     @Override
     public UserSteeltrat readById(Long id){
-        return em.find(UserSteeltrat.class, id);
+        UserSteeltrat e = em.find(UserSteeltrat.class, id);
+        if (e == null) {
+            throw new DBException(DBExceptionEnum.FIND_ERROR);
+        }
+        return e;
     }
     
     @Override

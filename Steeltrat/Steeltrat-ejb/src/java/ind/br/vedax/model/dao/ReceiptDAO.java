@@ -1,5 +1,8 @@
 package ind.br.vedax.model.dao;
 
+import ind.br.vedax.exceptions.DBException;
+import ind.br.vedax.exceptions.DBExceptionEnum;
+import ind.br.vedax.model.entities.Receipt;
 import ind.br.vedax.model.entities.Receipt;
 import java.util.List;
 import javax.ejb.LocalBean;
@@ -18,30 +21,50 @@ public class ReceiptDAO implements GenericDAO<Receipt>{
     
     @Override
     public void create(Receipt e) {
-        em.persist(e);
+        try {
+            em.persist(e);
+        } catch (Exception ex) {
+            throw new DBException(DBExceptionEnum.PERSIST_ERROR);
+        }
     }
 
     @Override
     public List<Receipt> read() {
-        return em.createNamedQuery("Receipt.findAll", Receipt.class).getResultList();
+        List<Receipt> lista = em.createNamedQuery("Receipt.findAll", Receipt.class).getResultList();
+        if (lista == null || lista.isEmpty()) {
+            throw new DBException(DBExceptionEnum.FIND_ERROR);
+        }
+        return lista;
     }
-    
-    public Long lastNumber(){
-        return Long.parseLong(em.createNamedQuery("Receipt.findLastNumberByIdReceipt", Receipt.class).getSingleResult().toString()+1);
-    }
-    
+
     @Override
     public void delete(Receipt e) {
-        em.remove(e);
+        try {
+            em.remove(e);
+        } catch (Exception ex) {
+            throw new DBException(DBExceptionEnum.REMOVE_ERROR);
+        }
     }
     
     @Override
     public Receipt readById(Long id){
-        return em.find(Receipt.class, id);
+        Receipt e = em.find(Receipt.class, id);
+        if (e == null) {
+            throw new DBException(DBExceptionEnum.FIND_ERROR);
+        }
+        return e;
     }
     
     @Override
     public void setEm(EntityManager em) {
         this.em = em;
+    }
+    
+    public Long lastNumber(){
+        Long e = Long.parseLong(em.createNamedQuery("Receipt.findLastNumberByIdReceipt", Receipt.class).getSingleResult().toString()+1);
+        if (e == null) {
+            throw new DBException(DBExceptionEnum.FIND_ERROR);
+        }
+        return e;
     }
 }
