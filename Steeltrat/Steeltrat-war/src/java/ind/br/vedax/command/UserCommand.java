@@ -25,7 +25,7 @@ public class UserCommand implements Command{
     private HttpServletResponse response;
     private String returnPage = "index.jsp";
     private UserSteeltrat userLogin;
-    private Employee emloyee;
+    private Employee employee;
     
     @Override
     public void init(HttpServletRequest request, HttpServletResponse response) {
@@ -52,7 +52,7 @@ public class UserCommand implements Command{
 
                 if (authorize(username, password)) {
                     request.getSession().setAttribute("resultado", true);
-                    request.getSession().setAttribute("employee", getEmployee(username));
+                    request.getSession().setAttribute("employee", employee);
                     username = "";
                     password = "";
                     if (request.getParameter("session") != null) {
@@ -163,11 +163,11 @@ public class UserCommand implements Command{
     }
     
     public boolean authorize(String username, String password) {
-        return (userLogin = userSteeltratDAO.readForLogin(username, password)) != null;
-    }
-
-    public Employee getEmployee(String username) {
-        return employeeDAO.readByIdUser(userLogin.getIdUser());
+        if((userLogin = userSteeltratDAO.readForLogin(username, password)) != null ){
+            employee = employeeDAO.readByIdUser(userLogin.getIdUser());
+            return true;
+        }
+        return false;
     }
 
     private UserSteeltratDAO lookupUserSteeltratDAOBean() {
