@@ -3,7 +3,6 @@ package ind.br.vedax.model.dao;
 import ind.br.vedax.exceptions.DBException;
 import ind.br.vedax.exceptions.DBExceptionEnum;
 import ind.br.vedax.model.entities.Product;
-import ind.br.vedax.model.entities.Product;
 import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
