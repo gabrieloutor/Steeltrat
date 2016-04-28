@@ -5,7 +5,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Steeltrat | Recebimento - Visualizar</title>
-    <link rel="icon" href="../../../img/favicon.ico" />
+        <link rel="icon" href="../../../img/favicon.ico" />
         <link href='css/home.css' rel='stylesheet'>
     </head>
     <body>
@@ -26,8 +26,11 @@
                 <tr>
                     <td>${receipt.idReceipt}</td>
                     <td>${receipt.idClient.nameClient}</td>
-                    <td>${receipt.getItemsReceiptList()}</td>
-                    
+                    <td>
+                        <c:forEach begin="1" end="${receipt.getItemsReceiptList().size()}" var="items">
+                            ${items}
+                        </c:forEach>
+                    </td>
                 </tr>
             </c:forEach>
         </table>

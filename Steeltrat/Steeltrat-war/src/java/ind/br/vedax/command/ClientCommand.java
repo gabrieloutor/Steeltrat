@@ -1,6 +1,7 @@
 package ind.br.vedax.command;
 
 import ind.br.vedax.enums.ReturnMsgEnum;
+import ind.br.vedax.exceptions.DBException;
 import ind.br.vedax.model.dao.AddressDAO;
 import ind.br.vedax.model.dao.ClientDAO;
 import ind.br.vedax.model.entities.Client;
@@ -56,11 +57,15 @@ public class ClientCommand implements Command{
                 client.setIdAddress(addressDAO.readById(Long.parseLong(request.getParameter("addresses"))));
                 
                 /* PERSITE O OBJETO NO BANCO */
-                clientDAO.create(client);
+                try{
+                    clientDAO.create(client);
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
+                }catch(Exception ex){
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.ERROR_MESSAGE.toString());
+                }
                 
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("clients", clientDAO.read());
-                request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
                 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/client/read.jsp";
