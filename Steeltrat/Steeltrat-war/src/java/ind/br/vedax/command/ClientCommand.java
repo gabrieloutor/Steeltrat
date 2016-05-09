@@ -1,5 +1,8 @@
 package ind.br.vedax.command;
 
+import ind.br.vedax.api.entities.Place;
+import ind.br.vedax.api.webservice.ConnectionManager;
+import ind.br.vedax.api.webservice.JSONMapsParser;
 import ind.br.vedax.enums.ReturnMsgEnum;
 import ind.br.vedax.exceptions.DBException;
 import ind.br.vedax.model.dao.AddressDAO;
@@ -134,6 +137,20 @@ public class ClientCommand implements Command {
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
+                returnPage = "WEB-INF/jsp/client/read.jsp";
+                break;
+            case "route":
+                String zipcode = request.getParameter("zipcode");
+
+                String contentStart = ConnectionManager.readContent("https://maps.googleapis.com/maps/api/geocode/json?address=06413-900&components=country:BR&key=AIzaSyB7USt8JY_YSX1IL-g0W_Utax1PzXlxHzA");
+                Place start = JSONMapsParser.parseFeed(contentStart);
+                
+                String contentEnd = ConnectionManager.readContent("https://maps.googleapis.com/maps/api/geocode/json?address=" + zipcode + "&components=country:BR&key=AIzaSyB7USt8JY_YSX1IL-g0W_Utax1PzXlxHzA");
+                Place end = JSONMapsParser.parseFeed(contentEnd);
+                
+                request.getSession().setAttribute("start", start);
+                request.getSession().setAttribute("end", end);
+                
                 returnPage = "WEB-INF/jsp/client/read.jsp";
                 break;
             default:

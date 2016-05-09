@@ -22,6 +22,7 @@
                 <td>NOME</td> 
                 <td>TELEFONE</td>
                 <td>C.E.P. / NR</td>
+                <td>ROTA</td>
             </tr>
             <c:forEach items="${clients}" var="client" varStatus="i">
                 <tr>
@@ -29,8 +30,21 @@
                     <td>${client.nameClient}</td>
                     <td>${client.telephone}</td>
                     <td>${client.idAddress.zipcode} / ${client.idAddress.numberAddress}</td>
+                    <td><a href="home?command=Client&action=route&zipcode=${client.idAddress.zipcode}" >Traçar Rota</a></td>
                 </tr>
             </c:forEach>
         </table>
+        <c:if test="${start!=null && end !=null}">
+            <iframe 
+                width="600"
+                height="450"
+                frameborder="0" style="border:0"
+                src="https://www.google.com/maps/embed/v1/directions?origin=${end.long_name}
+                      &destination=${start.long_name}
+                      &key=AIzaSyCCGEQb7tDuF0zBfklIvq34zCkvdRiSWOs">
+              </iframe>
+        </c:if>
+        ${end=null}
+        ${start=null}
     </body>
 </html>
