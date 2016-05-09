@@ -17,16 +17,19 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class UserCommand implements Command{
+public class UserCommand implements Command {
+
     EmployeeDAO employeeDAO = lookupEmployeeDAOBean();
     UserSteeltratDAO userSteeltratDAO = lookupUserSteeltratDAOBean();
     
+    private EntityManagerFactory emf;
+    private EntityManager em;
     private HttpServletRequest request;
     private HttpServletResponse response;
     private String returnPage = "index.jsp";
     private UserSteeltrat userLogin;
     private Employee employee;
-    
+
     @Override
     public void init(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
@@ -36,16 +39,22 @@ public class UserCommand implements Command{
     @Override
     public void execute() {
         /* ABRE CONEXÃO */
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("steeltrat_pu");
-        EntityManager em = emf.createEntityManager();
-        employeeDAO.setEm(em);
-        userSteeltratDAO.setEm(em);
-        em.getTransaction().begin();
+        try {
+            emf = Persistence.createEntityManagerFactory("steeltrat_pu");
+            em = emf.createEntityManager();
+            employeeDAO.setEm(em);
+            userSteeltratDAO.setEm(em);
+            em.getTransaction().begin();
+        } catch (Exception ex) {
+            request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            returnPage = "index.jsp";
+            return;
+        }
         
         /* INICIO LÓGICA */
         String action = request.getParameter("action");
         UserSteeltrat user = new UserSteeltrat();
-        switch (action){
+        switch (action) {
             case "login":
                 String username = request.getParameter("username");
                 String password = request.getParameter("password");
@@ -83,64 +92,64 @@ public class UserCommand implements Command{
                 /* VARIÁVEIS DO FORM */
                 user.setUsername(request.getParameter("username"));
                 user.setPassword(request.getParameter("password"));
-                
+
                 /* PERSITE O OBJETO NO BANCO */
                 userSteeltratDAO.create(user);
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("users", userSteeltratDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/user/read.jsp";
                 break;
             case "read":
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("users", userSteeltratDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/user/read.jsp";
                 break;
             case "update":
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("users", userSteeltratDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/user/update.jsp";
                 break;
             case "updateById":
                 /* CRIA OBJETO */
                 user = userSteeltratDAO.readById(Long.parseLong(request.getParameter("users")));
-                
+
                 /* PERSITE O OBJETO NO BANCO */
                 user.setUsername(request.getParameter("username"));
                 user.setPassword(request.getParameter("password"));
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("users", userSteeltratDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/user/read.jsp";
                 break;
             case "delete":
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("users", userSteeltratDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/user/delete.jsp";
                 break;
             case "delete.confirm":
                 /* CRIA OBJETO */
                 user = userSteeltratDAO.readById(Long.parseLong(request.getParameter("users")));
-                
+
                 /* PERSITE O OBJETO NO BANCO */
                 userSteeltratDAO.delete(user);
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("users", userSteeltratDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/user/read.jsp";
                 break;
@@ -150,20 +159,25 @@ public class UserCommand implements Command{
                 break;
         }
         /* FECHA LÓGICA */
-        
+
         /* FECHA CONEXÃO */
-        em.getTransaction().commit();
-        em.close();
-        emf.close();
+        try {
+            em.getTransaction().commit();
+            em.close();
+            emf.close();
+        } catch (Exception ex) {
+            request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            returnPage = "index.jsp";
+        }
     }
 
     @Override
     public String getReturnPage() {
         return returnPage;
     }
-    
+
     public boolean authorize(String username, String password) {
-        if((userLogin = userSteeltratDAO.readForLogin(username, password)) != null ){
+        if ((userLogin = userSteeltratDAO.readForLogin(username, password)) != null) {
             employee = employeeDAO.readByIdUser(userLogin.getIdUser());
             return true;
         }

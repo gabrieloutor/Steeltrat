@@ -16,14 +16,17 @@ import javax.persistence.Persistence;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ClientCommand implements Command{
+public class ClientCommand implements Command {
+
     AddressDAO addressDAO = lookupAddressDAOBean();
     ClientDAO clientDAO = lookupClientDAOBean();
     
+    private EntityManagerFactory emf;
+    private EntityManager em;
     public HttpServletRequest request;
     public HttpServletResponse response;
     public String returnPage = "index.jsp";
-    
+
     @Override
     public void init(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
@@ -33,47 +36,58 @@ public class ClientCommand implements Command{
     @Override
     public void execute() {
         /* ABRE CONEXÃO */
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("steeltrat_pu");
-        EntityManager em = emf.createEntityManager();
-        addressDAO.setEm(em);
-        clientDAO.setEm(em);
-        em.getTransaction().begin();
-        
+        try {
+            emf = Persistence.createEntityManagerFactory("steeltrat_pu");
+            em = emf.createEntityManager();
+            addressDAO.setEm(em);
+            clientDAO.setEm(em);
+            em.getTransaction().begin();
+        } catch (Exception ex) {
+            request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            returnPage = "index.jsp";
+            return ;
+        }
+
         /* INICIO LÓGICA */
         String action = request.getParameter("action");
         Client client = new Client();
-        switch (action){
+        switch (action) {
             case "insert":
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("addresses", addressDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/client/insert.jsp";
                 break;
             case "insert.confirm":
                 /* VARIÁVEIS DO FORM */
-                client.setNameClient(request.getParameter("name_client"));
-                client.setTelephone(Long.parseLong(request.getParameter("telephone_client")));
-                client.setIdAddress(addressDAO.readById(Long.parseLong(request.getParameter("addresses"))));
-                
+                try {
+                    client.setNameClient(request.getParameter("name_client"));
+                    client.setTelephone(Long.parseLong(request.getParameter("telephone_client")));
+                    client.setIdAddress(addressDAO.readById(Long.parseLong(request.getParameter("addresses"))));
+                } catch (Exception ex) {
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.INPUT_ERROR_MESSAGE.toString());
+                    returnPage = "WEB-INF/jsp/client/insert.jsp";
+                    break;
+                }
                 /* PERSITE O OBJETO NO BANCO */
-                try{
+                try {
                     clientDAO.create(client);
                     request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
-                }catch(Exception ex){
+                } catch (Exception ex) {
                     request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.ERROR_MESSAGE.toString());
                 }
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("clients", clientDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/client/read.jsp";
                 break;
             case "read":
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("clients", clientDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/client/read.jsp";
                 break;
@@ -81,44 +95,44 @@ public class ClientCommand implements Command{
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("addresses", addressDAO.read());
                 request.getSession().setAttribute("clients", clientDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/client/update.jsp";
                 break;
             case "updateById":
                 /* CRIA OBJETO */
                 client = clientDAO.readById(Long.parseLong(request.getParameter("clients")));
-                
+
                 /* VARIÁVEIS DO FORM */
                 client.setNameClient(request.getParameter("name_client"));
                 client.setTelephone(Long.parseLong(request.getParameter("telephone_client")));
                 client.setIdAddress(addressDAO.readById(Long.parseLong(request.getParameter("addresses"))));
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("clients", clientDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/client/read.jsp";
                 break;
             case "delete":
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("clients", clientDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/client/delete.jsp";
                 break;
             case "delete.confirm":
                 /* CRIA OBJETO */
                 client = clientDAO.readById(Long.parseLong(request.getParameter("clients")));
-                
+
                 /* PERSITE O OBJETO NO BANCO */
                 clientDAO.delete(client);
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("clients", clientDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/client/read.jsp";
                 break;
@@ -128,11 +142,16 @@ public class ClientCommand implements Command{
                 break;
         }
         /* FECHA LÓGICA */
-        
+
         /* FECHA CONEXÃO */
-        em.getTransaction().commit();
-        em.close();
-        emf.close();
+        try {
+            em.getTransaction().commit();
+            em.close();
+            emf.close();
+        } catch (Exception ex) {
+            request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            returnPage = "index.jsp";
+        }
     }
 
     @Override
@@ -159,5 +178,5 @@ public class ClientCommand implements Command{
             throw new RuntimeException(ne);
         }
     }
-    
+
 }

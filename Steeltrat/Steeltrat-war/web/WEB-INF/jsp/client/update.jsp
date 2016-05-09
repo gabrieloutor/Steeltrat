@@ -11,6 +11,8 @@
     <body>
         <%@include file="../section.jspf" %>
         <%@include file="../menu.jspf" %>
+        <div id="returnMsgError">${returnMsgError}</div>
+        ${returnMsgError=null}
         <h3>Atualizar Cliente</h3>
         <form method="POST" id="formUpdate" action="home">
             <label for="clients">Clientes:&nbsp;</label>

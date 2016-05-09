@@ -1,6 +1,7 @@
 package ind.br.vedax.controller;
 
 import ind.br.vedax.command.Command;
+import ind.br.vedax.enums.ReturnMsgEnum;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
@@ -34,9 +35,8 @@ public class FrontController extends HttpServlet {
                 command.execute();
                 request.getRequestDispatcher(command.getReturnPage()).forward(request, response);
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-                // SE NAO ENCONTRAR CLASSE COMMAND
-                // TIPO ILEGAL DE ACESSO
-                Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
+                request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.ERROR_MESSAGE.toString());
+                request.getRequestDispatcher("index.jsp").forward(request, response);
             }
         }
     }

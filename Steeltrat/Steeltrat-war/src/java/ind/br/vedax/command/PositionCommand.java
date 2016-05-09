@@ -14,12 +14,15 @@ import javax.persistence.Persistence;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class PositionCommand implements Command{
+public class PositionCommand implements Command {
+
     PositionSteeltratDAO positionSteeltratDAO = lookupPositionSteeltratDAOBean();
-    public HttpServletRequest request;
-    public HttpServletResponse response;
-    public String returnPage = "index.jsp";
-    
+    private EntityManagerFactory emf;
+    private EntityManager em;
+    private HttpServletRequest request;
+    private HttpServletResponse response;
+    private String returnPage = "index.jsp";
+
     @Override
     public void init(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
@@ -29,15 +32,20 @@ public class PositionCommand implements Command{
     @Override
     public void execute() {
         /* ABRE CONEXÃO */
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("steeltrat_pu");
-        EntityManager em = emf.createEntityManager();
-        positionSteeltratDAO.setEm(em);
-        em.getTransaction().begin();
-        
+        try {
+            emf = Persistence.createEntityManagerFactory("steeltrat_pu");
+            em = emf.createEntityManager();
+            positionSteeltratDAO.setEm(em);
+            em.getTransaction().begin();
+            } catch (Exception ex) {
+            request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            returnPage = "index.jsp";
+            return;
+        }
         /* INICIO LÓGICA */
         String action = request.getParameter("action");
         PositionSteeltrat position = new PositionSteeltrat();
-        switch (action){
+        switch (action) {
             case "insert":
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/position/insert.jsp";
@@ -45,63 +53,63 @@ public class PositionCommand implements Command{
             case "insert.confirm":
                 /* VARIÁVEIS DO FORM */
                 position.setNamePosition(request.getParameter("name_position"));
-                
+
                 /* PERSITE O OBJETO NO BANCO */
                 positionSteeltratDAO.create(position);
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("positions", positionSteeltratDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/position/read.jsp";
                 break;
             case "read":
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("positions", positionSteeltratDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/position/read.jsp";
                 break;
             case "update":
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("positions", positionSteeltratDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/position/update.jsp";
                 break;
             case "updateById":
                 /* CRIA OBJETO */
                 position = positionSteeltratDAO.readById(Long.parseLong(request.getParameter("positions")));
-                
+
                 /* PERSITE O OBJETO NO BANCO */
                 position.setNamePosition(request.getParameter("name_position"));
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("positions", positionSteeltratDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/position/read.jsp";
                 break;
             case "delete":
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("positions", positionSteeltratDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/position/delete.jsp";
                 break;
             case "delete.confirm":
                 /* CRIA OBJETO */
                 position = positionSteeltratDAO.readById(Long.parseLong(request.getParameter("positions")));
-                
+
                 /* PERSITE O OBJETO NO BANCO */
                 positionSteeltratDAO.delete(position);
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("positions", positionSteeltratDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/position/read.jsp";
                 break;
@@ -111,11 +119,16 @@ public class PositionCommand implements Command{
                 break;
         }
         /* FECHA LÓGICA */
-        
+
         /* FECHA CONEXÃO */
-        em.getTransaction().commit();
-        em.close();
-        emf.close();
+        try {
+            em.getTransaction().commit();
+            em.close();
+            emf.close();
+        } catch (Exception ex) {
+            request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            returnPage = "index.jsp";
+        }
     }
 
     @Override
@@ -132,5 +145,5 @@ public class PositionCommand implements Command{
             throw new RuntimeException(ne);
         }
     }
-    
+
 }

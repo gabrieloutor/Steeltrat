@@ -20,18 +20,21 @@ import javax.persistence.Persistence;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ItemsReceiptCommand implements Command{
+public class ItemsReceiptCommand implements Command {
+
     ItemsReceiptDAO itemsReceiptDAO = lookupItemsReceiptDAOBean();
     ProductDAO productDAO = lookupProductDAOBean();
     MaterialDAO materialDAO = lookupMaterialDAOBean();
     StandardDAO standardDAO = lookupStandardDAOBean();
     EmployeeDAO employeeDAO = lookupEmployeeDAOBean();
     ReceiptDAO receiptDAO = lookupReceiptDAOBean();
-    
-    public HttpServletRequest request;
-    public HttpServletResponse response;
-    public String returnPage = "index.jsp";
-    
+
+    private EntityManagerFactory emf;
+    private EntityManager em;
+    private HttpServletRequest request;
+    private HttpServletResponse response;
+    private String returnPage = "index.jsp";
+
     @Override
     public void init(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
@@ -41,20 +44,25 @@ public class ItemsReceiptCommand implements Command{
     @Override
     public void execute() {
         /* ABRE CONEXÃO */
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("steeltrat_pu");
-        EntityManager em = emf.createEntityManager();
-        itemsReceiptDAO.setEm(em);
-        productDAO.setEm(em);
-        materialDAO.setEm(em);
-        standardDAO.setEm(em);
-        employeeDAO.setEm(em);
-        receiptDAO.setEm(em);
-        em.getTransaction().begin();
-
+        try {
+            emf = Persistence.createEntityManagerFactory("steeltrat_pu");
+            em = emf.createEntityManager();
+            itemsReceiptDAO.setEm(em);
+            productDAO.setEm(em);
+            materialDAO.setEm(em);
+            standardDAO.setEm(em);
+            employeeDAO.setEm(em);
+            receiptDAO.setEm(em);
+            em.getTransaction().begin();
+        } catch (Exception ex) {
+            request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            returnPage = "index.jsp";
+            return;
+        }
         /* INICIO LÓGICA */
         String action = request.getParameter("action");
         ItemsReceipt itemReceipt = new ItemsReceipt();
-        switch (action){
+        switch (action) {
             case "insert":
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("receipts", receiptDAO.read());
@@ -62,7 +70,7 @@ public class ItemsReceiptCommand implements Command{
                 request.getSession().setAttribute("materials", materialDAO.read());
                 request.getSession().setAttribute("standards", standardDAO.read());
                 request.getSession().setAttribute("employees", employeeDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/itemReceipt/insert.jsp";
                 break;
@@ -81,21 +89,21 @@ public class ItemsReceiptCommand implements Command{
                 itemReceipt.setIdEmployee(employeeDAO.readById(Long.parseLong(request.getParameter("employees"))));
                 itemReceipt.setMarkItemReceipt(request.getParameter("mark_item_receipt"));
                 itemReceipt.setDateItemReceipt(DateUtil.string2Date(request.getParameter("date_item_receipt")));
-                
+
                 /* PERSITE O OBJETO NO BANCO */
                 itemsReceiptDAO.create(itemReceipt);
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
                 request.getSession().setAttribute("itemReceipts", itemsReceiptDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/itemReceipt/read.jsp";
                 break;
             case "read":
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("itemReceipts", itemsReceiptDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/itemReceipt/read.jsp";
                 break;
@@ -107,14 +115,14 @@ public class ItemsReceiptCommand implements Command{
                 request.getSession().setAttribute("materials", materialDAO.read());
                 request.getSession().setAttribute("standards", standardDAO.read());
                 request.getSession().setAttribute("employees", employeeDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/itemReceipt/update.jsp";
                 break;
             case "updateById":
                 /* CRIA OBJETO */
                 itemReceipt = itemsReceiptDAO.readById(Long.parseLong(request.getParameter("itemReceipts")));
-                
+
                 /* VARIÁVEIS DO FORM */
                 itemReceipt.setIdReceipt(receiptDAO.readById(Long.parseLong(request.getParameter("receipts"))));
                 itemReceipt.setNfClient(request.getParameter("nf_client"));
@@ -129,11 +137,11 @@ public class ItemsReceiptCommand implements Command{
                 itemReceipt.setIdEmployee(employeeDAO.readById(Long.parseLong(request.getParameter("employees"))));
                 itemReceipt.setMarkItemReceipt(request.getParameter("mark_item_receipt"));
                 itemReceipt.setDateItemReceipt(DateUtil.string2Date(request.getParameter("date_item_receipt")));
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
                 request.getSession().setAttribute("itemReceipts", itemsReceiptDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/itemReceipt/read.jsp";
                 break;
@@ -141,21 +149,21 @@ public class ItemsReceiptCommand implements Command{
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("itemReceipts", itemsReceiptDAO.read());
                 request.getSession().setAttribute("receipts", receiptDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/itemReceipt/delete.jsp";
                 break;
             case "delete.confirm":
                 /* CRIA OBJETO */
                 itemReceipt = itemsReceiptDAO.readById(Long.parseLong(request.getParameter("itemReceipts")));
-                
+
                 /* PERSITE O OBJETO NO BANCO */
                 itemsReceiptDAO.delete(itemReceipt);
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("itemReceipts", itemsReceiptDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/itemReceipt/read.jsp";
                 break;
@@ -167,9 +175,14 @@ public class ItemsReceiptCommand implements Command{
         /* FECHA LÓGICA */
 
         /* FECHA CONEXÃO */
-        em.getTransaction().commit();
-        em.close();
-        emf.close();
+        try {
+            em.getTransaction().commit();
+            em.close();
+            emf.close();
+        } catch (Exception ex) {
+            request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            returnPage = "index.jsp";
+        }
     }
 
     @Override
@@ -236,5 +249,5 @@ public class ItemsReceiptCommand implements Command{
             throw new RuntimeException(ne);
         }
     }
-    
+
 }

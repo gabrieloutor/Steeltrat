@@ -22,7 +22,7 @@ public class ClientDAO implements GenericDAO<Client>{
     public void create(Client e) {
         try {
             em.persist(e);
-        } catch (Exception ex) {
+        } catch (DBException ex) {
             throw new DBException(DBExceptionEnum.PERSIST_ERROR);
         }
     }

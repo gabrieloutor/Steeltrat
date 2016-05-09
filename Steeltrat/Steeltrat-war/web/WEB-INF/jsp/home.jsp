@@ -1,5 +1,6 @@
 <%@page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%--<%@taglib prefix="w" uri="/WEB-INF/tlds/weather.tld" %>--%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,5 +13,8 @@
             <%@include file="section.jspf" %>
             <%@include file="menu.jspf" %>
         </c:if>
+        <div id="returnMsgError">${returnMsgError}</div>
+        ${returnMsgError=null}
+        <!--<w:weather appid="d29ad1fdab1ac80d86ae9837a42cfd7e" city="Barueri" units="metric"></w:weather>-->
     </body>
 </html>

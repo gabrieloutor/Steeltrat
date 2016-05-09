@@ -44,5 +44,19 @@ public enum ReturnMsgEnum {
         public String toString(){
             return "Algo deu errado! Contate o Administrador do Sistema";
         }
+    },
+    
+    INPUT_ERROR_MESSAGE{
+        @Override
+        public String toString(){
+            return "Erro na digitação dos dados";
+        }
+    },
+    
+    CONNECT_ERROR_MESSAGE{
+        @Override
+        public String toString(){
+            return "Falha na conexão ao banco de dados! Tente novamente mais tarde.";
+        }
     }
 }

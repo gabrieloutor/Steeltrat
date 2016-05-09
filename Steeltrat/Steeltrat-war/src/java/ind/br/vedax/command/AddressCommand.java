@@ -15,11 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class AddressCommand implements Command {
+
     AddressDAO addressDAO = lookupAddressDAOBean();
-    
-    public HttpServletRequest request;
-    public HttpServletResponse response;
-    public String returnPage = "index.jsp";
+
+    private EntityManagerFactory emf;
+    private EntityManager em;
+    private HttpServletRequest request;
+    private HttpServletResponse response;
+    private String returnPage = "index.jsp";
 
     @Override
     public void init(HttpServletRequest request, HttpServletResponse response) {
@@ -30,11 +33,16 @@ public class AddressCommand implements Command {
     @Override
     public void execute() {
         /* ABRE CONEXÃO */
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("steeltrat_pu");
-        EntityManager em = emf.createEntityManager();
-        addressDAO.setEm(em);
-        em.getTransaction().begin();
-
+        try {
+            emf = Persistence.createEntityManagerFactory("steeltrat_pu");
+            em = emf.createEntityManager();
+            addressDAO.setEm(em);
+            em.getTransaction().begin();
+        } catch (Exception ex) {
+            request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            returnPage = "index.jsp";
+            return;
+        }
         /* INICIO LÓGICA */
         String action = request.getParameter("action");
         Address address = new Address();
@@ -47,64 +55,64 @@ public class AddressCommand implements Command {
                 /* VARIÁVEIS DO FORM */
                 address.setZipcode(request.getParameter("zipcode"));
                 address.setNumberAddress(Integer.parseInt(request.getParameter("number_address")));
-                
+
                 /* PERSITE O OBJETO NO BANCO */
                 addressDAO.create(address);
 
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("addresses", addressDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/address/read.jsp";
                 break;
             case "read":
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("addresses", addressDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/address/read.jsp";
                 break;
             case "update":
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("addresses", addressDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/address/update.jsp";
                 break;
             case "updateById":
                 /* CRIA OBJETO */
                 address = addressDAO.readById(Long.parseLong(request.getParameter("addresses")));
-                
+
                 /* VARIÁVEIS DO FORM */
                 address.setZipcode(request.getParameter("zipcode"));
                 address.setNumberAddress(Integer.parseInt(request.getParameter("number_address")));
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("addresses", addressDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/address/read.jsp";
                 break;
             case "delete":
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("addresses", addressDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/address/delete.jsp";
                 break;
             case "delete.confirm":
                 /* CRIA OBJETO */
                 address = addressDAO.readById(Long.parseLong(request.getParameter("addresses")));
-                
+
                 /* PERSITE O OBJETO NO BANCO */
                 addressDAO.delete(address);
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("addresses", addressDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/address/read.jsp";
                 break;
@@ -116,16 +124,21 @@ public class AddressCommand implements Command {
         /* FECHA LÓGICA */
 
         /* FECHA CONEXÃO */
-        em.getTransaction().commit();
-        em.close();
-        emf.close();
+        try {
+            em.getTransaction().commit();
+            em.close();
+            emf.close();
+        } catch (Exception ex) {
+            request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            returnPage = "index.jsp";
+        }
     }
 
     @Override
     public String getReturnPage() {
         return returnPage;
     }
-    
+
     private AddressDAO lookupAddressDAOBean() {
         try {
             Context c = new InitialContext();

@@ -14,13 +14,16 @@ import javax.persistence.Persistence;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class StandardCommand implements Command{
+public class StandardCommand implements Command {
+
     StandardDAO standardDAO = lookupStandardDAOBean();
     
-    public HttpServletRequest request;
-    public HttpServletResponse response;
-    public String returnPage = "index.jsp";
-    
+    private EntityManagerFactory emf;
+    private EntityManager em;
+    private HttpServletRequest request;
+    private HttpServletResponse response;
+    private String returnPage = "index.jsp";
+
     @Override
     public void init(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
@@ -30,15 +33,20 @@ public class StandardCommand implements Command{
     @Override
     public void execute() {
         /* ABRE CONEXÃO */
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("steeltrat_pu");
-        EntityManager em = emf.createEntityManager();
-        standardDAO.setEm(em);
-        em.getTransaction().begin();
-        
+        try {
+            emf = Persistence.createEntityManagerFactory("steeltrat_pu");
+            em = emf.createEntityManager();
+            standardDAO.setEm(em);
+            em.getTransaction().begin();
+        } catch (Exception ex) {
+            request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            returnPage = "index.jsp";
+            return;
+        }
         /* INICIO LÓGICA */
         String action = request.getParameter("action");
         Standard standard = new Standard();
-        switch (action){
+        switch (action) {
             case "insert":
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/standard/insert.jsp";
@@ -47,64 +55,64 @@ public class StandardCommand implements Command{
                 /* VARIÁVEIS DO FORM */
                 standard.setNameStandard(request.getParameter("name_standard"));
                 standard.setMarkStandard(request.getParameter("mark_standard"));
-                
+
                 /* PERSITE O OBJETO NO BANCO */
                 standardDAO.create(standard);
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("standards", standardDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/standard/read.jsp";
                 break;
             case "read":
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("standards", standardDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/standard/read.jsp";
                 break;
             case "update":
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("standards", standardDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/standard/update.jsp";
                 break;
             case "updateById":
                 /* CRIA OBJETO */
                 standard = standardDAO.readById(Long.parseLong(request.getParameter("standards")));
-                
+
                 /* VARIÁVEIS DO FORM */
                 standard.setNameStandard(request.getParameter("name_standard"));
                 standard.setMarkStandard(request.getParameter("mark_standard"));
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("standards", standardDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/standard/read.jsp";
                 break;
             case "delete":
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("standards", standardDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/standard/delete.jsp";
                 break;
             case "delete.confirm":
                 /* CRIA OBJETO */
                 standard = standardDAO.readById(Long.parseLong(request.getParameter("standards")));
-                
+
                 /* PERSITE O OBJETO NO BANCO */
                 standardDAO.delete(standard);
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("standards", standardDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/standard/read.jsp";
                 break;
@@ -114,11 +122,16 @@ public class StandardCommand implements Command{
                 break;
         }
         /* FECHA LÓGICA */
-        
+
         /* FECHA CONEXÃO */
-        em.getTransaction().commit();
-        em.close();
-        emf.close();
+        try {
+            em.getTransaction().commit();
+            em.close();
+            emf.close();
+        } catch (Exception ex) {
+            request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            returnPage = "index.jsp";
+        }
     }
 
     @Override
@@ -135,5 +148,5 @@ public class StandardCommand implements Command{
             throw new RuntimeException(ne);
         }
     }
-    
+
 }

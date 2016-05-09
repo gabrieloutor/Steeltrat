@@ -15,11 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class MaterialCommand implements Command {
-    MaterialDAO materialDAO = lookupMaterialDAOBean();
 
-    public HttpServletRequest request;
-    public HttpServletResponse response;
-    public String returnPage = "index.jsp";
+    MaterialDAO materialDAO = lookupMaterialDAOBean();
+    
+    private EntityManagerFactory emf;
+    private EntityManager em;
+    private HttpServletRequest request;
+    private HttpServletResponse response;
+    private String returnPage = "index.jsp";
 
     @Override
     public void init(HttpServletRequest request, HttpServletResponse response) {
@@ -30,11 +33,16 @@ public class MaterialCommand implements Command {
     @Override
     public void execute() {
         /* ABRE CONEXÃO */
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("steeltrat_pu");
-        EntityManager em = emf.createEntityManager();
-        materialDAO.setEm(em);
-        em.getTransaction().begin();
-
+        try {
+            emf = Persistence.createEntityManagerFactory("steeltrat_pu");
+            em = emf.createEntityManager();
+            materialDAO.setEm(em);
+            em.getTransaction().begin();
+        } catch (Exception ex) {
+            request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            returnPage = "index.jsp";
+            return;
+        }
         /* INICIO LÓGICA */
         String action = request.getParameter("action");
         Material material = new Material();
@@ -47,64 +55,64 @@ public class MaterialCommand implements Command {
                 /* VARIÁVEIS DO FORM */
                 material.setNameMaterial(request.getParameter("name_material"));
                 material.setMarkMaterial(request.getParameter("mark_material"));
-                
+
                 /* PERSITE O OBJETO NO BANCO */
                 materialDAO.create(material);
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("materials", materialDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/material/read.jsp";
                 break;
             case "read":
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("materials", materialDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/material/read.jsp";
                 break;
             case "update":
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("materials", materialDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/material/update.jsp";
                 break;
             case "updateById":
                 /* CRIA OBJETO */
                 material = materialDAO.readById(Long.parseLong(request.getParameter("materials")));
-                
+
                 /* VARIÁVEIS DO FORM */
                 material.setNameMaterial(request.getParameter("name_material"));
                 material.setMarkMaterial(request.getParameter("mark_material"));
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("materials", materialDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/material/read.jsp";
                 break;
             case "delete":
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("materials", materialDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/material/delete.jsp";
                 break;
             case "delete.confirm":
                 /* CRIA OBJETO */
                 material = materialDAO.readById(Long.parseLong(request.getParameter("materials")));
-                
+
                 /* PERSITE O OBJETO NO BANCO */
                 materialDAO.delete(material);
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("materials", materialDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/material/read.jsp";
                 break;
@@ -116,9 +124,14 @@ public class MaterialCommand implements Command {
         /* FECHA LÓGICA */
 
         /* FECHA CONEXÃO */
-        em.getTransaction().commit();
-        em.close();
-        emf.close();
+        try {
+            em.getTransaction().commit();
+            em.close();
+            emf.close();
+        } catch (Exception ex) {
+            request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            returnPage = "index.jsp";
+        }
     }
 
     @Override

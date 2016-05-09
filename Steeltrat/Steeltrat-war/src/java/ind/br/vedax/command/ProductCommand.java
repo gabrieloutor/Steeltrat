@@ -14,13 +14,16 @@ import javax.persistence.Persistence;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ProductCommand implements Command{
-    ind.br.vedax.model.dao.ProductDAO productDAO = lookupProductDAOBean();
-    
-    public HttpServletRequest request;
-    public HttpServletResponse response;
-    public String returnPage = "index.jsp";
-    
+public class ProductCommand implements Command {
+
+    ProductDAO productDAO = lookupProductDAOBean();
+
+    private EntityManagerFactory emf;
+    private EntityManager em;
+    private HttpServletRequest request;
+    private HttpServletResponse response;
+    private String returnPage = "index.jsp";
+
     @Override
     public void init(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
@@ -30,15 +33,20 @@ public class ProductCommand implements Command{
     @Override
     public void execute() {
         /* ABRE CONEXÃO */
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("steeltrat_pu");
-        EntityManager em = emf.createEntityManager();
-        productDAO.setEm(em);
-        em.getTransaction().begin();
-        
+        try {
+            emf = Persistence.createEntityManagerFactory("steeltrat_pu");
+            em = emf.createEntityManager();
+            productDAO.setEm(em);
+            em.getTransaction().begin();
+        } catch (Exception ex) {
+            request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            returnPage = "index.jsp";
+            return;
+        }
         /* INICIO LÓGICA */
         String action = request.getParameter("action");
         Product product = new Product();
-        switch (action){
+        switch (action) {
             case "insert":
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/product/insert.jsp";
@@ -47,64 +55,64 @@ public class ProductCommand implements Command{
                 /* VARIÁVEIS DO FORM */
                 product.setDescriptionProduct(request.getParameter("description_product"));
                 product.setPrice(Double.parseDouble(request.getParameter("price")));
-                
+
                 /* PERSITE O OBJETO NO BANCO */
                 productDAO.create(product);
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("products", productDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/product/read.jsp";
                 break;
             case "read":
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("products", productDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/product/read.jsp";
                 break;
             case "update":
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("products", productDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/product/update.jsp";
                 break;
             case "updateById":
                 /* CRIA OBJETO */
                 product = productDAO.readById(Long.parseLong(request.getParameter("products")));
-                
+
                 /* VARIÁVEIS DO FORM */
                 product.setDescriptionProduct(request.getParameter("description_product"));
                 product.setPrice(Double.parseDouble(request.getParameter("price")));
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("products", productDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/product/read.jsp";
                 break;
             case "delete":
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("products", productDAO.read());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/product/delete.jsp";
                 break;
             case "delete.confirm":
                 /* CRIA OBJETO */
                 product = productDAO.readById(Long.parseLong(request.getParameter("products")));
-                
+
                 /* PERSITE O OBJETO NO BANCO */
                 productDAO.delete(product);
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("products", productDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/product/read.jsp";
                 break;
@@ -112,6 +120,17 @@ public class ProductCommand implements Command{
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.ERROR_MESSAGE.toString());
                 break;
+        }
+        /* FECHA LÓGICA */
+
+        /* FECHA CONEXÃO */
+        try {
+            em.getTransaction().commit();
+            em.close();
+            emf.close();
+        } catch (Exception ex) {
+            request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            returnPage = "index.jsp";
         }
     }
 
@@ -129,5 +148,5 @@ public class ProductCommand implements Command{
             throw new RuntimeException(ne);
         }
     }
-    
+
 }
