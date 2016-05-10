@@ -13,7 +13,6 @@
         <%@include file="../menu.jspf" %>
         <h3>Atualizar Usuário</h3>
         <form method="POST" id="formUpdate" action="home">
-            
             <label for="users">Usuarios:&nbsp;</label>
             <select name="users" id="mySelect" onchange="select.call(this, event)" >
                 <option value="">&#45;&#45; Selecione o Usuário &#45;&#45;</option>

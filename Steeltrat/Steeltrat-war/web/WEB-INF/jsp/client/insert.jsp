@@ -11,8 +11,6 @@
     <body>
         <%@include file="../section.jspf" %>
         <%@include file="../menu.jspf" %>
-        <div id="returnMsgError">${returnMsgError}</div>
-        ${returnMsgError=null}
         <h3>Inserir Cliente</h3>
         <form method="POST" id="formInsert" action="home" >
             <label for="name_client">Nome Cliente:</label> <input type="text" name="name_client" id="name_client" size="30" onchange="myFunctionTwo()">
