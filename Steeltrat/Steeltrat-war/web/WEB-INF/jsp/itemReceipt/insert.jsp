@@ -77,7 +77,7 @@
             <br>
             <label for="mark_item_receipt">Observação:</label> <input type="text" readonly name="mark_item_receipt" id="mark_item_receipt" size="30">
             <br>
-            <label for="date_item_receipt">Data de Recebimento:</label> <input type="date" readonly name="date_item_receipt" id="date_item_receipt" size="20" maxlength="20">
+            <label for="date_item_receipt">Data de Recebimento:</label> <input type="text" readonly name="date_item_receipt" id="date_item_receipt" size="20" maxlength="20">
             <br>
             <input type="hidden" name="command" value="ItemsReceipt">
             <input type="hidden" name="action" value="insert.confirm">

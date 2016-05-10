@@ -40,7 +40,6 @@ public class AddressCommand implements Command {
             em.getTransaction().begin();
         } catch (Exception ex) {
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
-            returnPage = "index.jsp";
             return;
         }
         /* INICIO LÓGICA */

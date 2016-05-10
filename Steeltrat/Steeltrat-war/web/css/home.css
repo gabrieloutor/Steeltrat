@@ -119,7 +119,10 @@ h1 {
 }
 
 
-
+input,
+select{
+    font-size: 14px;
+}
 
 
 input[type="text"],
