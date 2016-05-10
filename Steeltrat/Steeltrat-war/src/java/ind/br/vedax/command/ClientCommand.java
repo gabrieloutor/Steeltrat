@@ -140,17 +140,21 @@ public class ClientCommand implements Command {
                 returnPage = "WEB-INF/jsp/client/read.jsp";
                 break;
             case "route":
+                /* VARIÁVEL DA TABELA */
                 String zipcode = request.getParameter("zipcode");
-
+                
+                /* CRIA CONTEXTO PARA API's */
                 String contentStart = ConnectionManager.readContent("https://maps.googleapis.com/maps/api/geocode/json?address=06413-900&components=country:BR&key=AIzaSyB7USt8JY_YSX1IL-g0W_Utax1PzXlxHzA");
                 Place start = JSONMapsParser.parseFeed(contentStart);
                 
                 String contentEnd = ConnectionManager.readContent("https://maps.googleapis.com/maps/api/geocode/json?address=" + zipcode + "&components=country:BR&key=AIzaSyB7USt8JY_YSX1IL-g0W_Utax1PzXlxHzA");
                 Place end = JSONMapsParser.parseFeed(contentEnd);
                 
+                /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("start", start);
                 request.getSession().setAttribute("end", end);
                 
+                /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/client/read.jsp";
                 break;
             default:

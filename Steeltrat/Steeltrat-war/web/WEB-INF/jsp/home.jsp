@@ -5,7 +5,7 @@
 <html>
     <head>
         <title>Steeltrat | Home</title>
-        <link rel="icon" href="../../../img/favicon.ico" />
+        <link rel="icon" href="img/favicon.ico" />
         <link href='css/home.css' rel='stylesheet'>
     </head>
     <body>
