@@ -23,9 +23,9 @@
                 </c:forEach>
             </select>
             <br>
-            <label for="name_material">Novo nome do Material: </label> <input type="text" readonly id="name_material" name="name_material" size="30">
+            <label for="name_material">Novo nome do Material: </label> <input type="text" readonly id="name_material" name="name_material" size="60" maxlength="60">
             <br>
-            <label for="mark_material">Observação do Material:</label> <input type="tel" readonly name="mark_material" id="mark_material" size="30">
+            <label for="mark_material">Observação do Material:</label> <textarea name="mark_material" id="mark_material" readonly maxlength="150" size="150" ></textarea>
             <br>
             <input type="hidden" name="command" value="Material">
             <input type="hidden" name="action" value="updateById">

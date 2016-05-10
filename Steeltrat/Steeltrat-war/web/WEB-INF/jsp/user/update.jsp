@@ -23,9 +23,9 @@
                 </c:forEach>
             </select>
             <br>
-            <label for="username">Novo username: </label> <input type="text" readonly id="username" name="username" size="30">
+            <label for="username">Novo username: </label> <input type="text" readonly id="username" name="username" size="15" maxlength="15">
             <br>
-            <label for="password">Senha:</label> <input type="password" readonly name="password" id="password" size="30">
+            <label for="password">Senha:</label> <input type="password" readonly name="password" id="password" size="32" max="32">
             <br>
             <input type="button" value="Atualizar" onclick="myFunction()">
             <br>

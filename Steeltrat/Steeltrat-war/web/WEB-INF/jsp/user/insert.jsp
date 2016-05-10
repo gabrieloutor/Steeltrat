@@ -13,9 +13,9 @@
         <%@include file="../menu.jspf" %>
         <h3>Inserir Usuário</h3>
         <form method="POST" id="formInsert" action="home" >
-            <label for="username">Username:</label> <input type="text" name="username" id="username" size="30" onchange="myFunctionTwo()">
+            <label for="username">Username:</label> <input type="text" name="username" id="username" onchange="myFunctionTwo()" size="15" maxlength="15">
             <br>
-            <label for="password">Senha:</label> <input type="password" readonly name="password" id="password" size="30">
+            <label for="password">Senha:</label> <input type="password" readonly name="password" id="password" size="32" max="32">
             <br>
             <input type="button" value="Incluir" onclick="myFunction()">
             <br>

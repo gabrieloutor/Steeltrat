@@ -13,9 +13,9 @@
         <%@include file="../menu.jspf" %>
         <h3>Inserir Cliente</h3>
         <form method="POST" id="formInsert" action="home" >
-            <label for="name_client">Nome Cliente:</label> <input type="text" name="name_client" id="name_client" size="30" onchange="myFunctionTwo()">
+            <label for="name_client">Nome Cliente:</label> <input type="text" name="name_client" id="name_client" onchange="myFunctionTwo()" size="60" maxlength="60">
             <br>
-            <label for="telephone_client">Telefone Cliente:</label> <input type="number" readonly name="telephone_client" id="telephone_client" size="30" maxlength="19">
+            <label for="telephone_client">Telefone Cliente:</label> <input type="number" readonly name="telephone_client" id="telephone_client" size="19" maxlength="19">
             <br>
             <label for="addresses">Endereços:&nbsp;</label>
             <select name="addresses" id="addresses" disabled>

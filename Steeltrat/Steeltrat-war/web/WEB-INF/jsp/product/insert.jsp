@@ -13,9 +13,9 @@
         <%@include file="../menu.jspf" %>
         <h3>Inserir Produto</h3>
         <form method="POST" id="formInsert" action="home" >
-            <label for="description_product">Descrição:&nbsp;</label> <input type="text" name="description_product" id="description_product" size="30" onchange="myFunctionTwo()">
+            <label for="description_product">Descrição:&nbsp;</label> <input type="text" name="description_product" id="description_product" onchange="myFunctionTwo()" size="50" maxlength="50">
             <br>
-            <label for="price">Preço:&nbsp;</label> <input type="number" readonly name="price" id="price" size="30">
+            <label for="price">Preço:&nbsp;</label> <input type="number" readonly name="price" id="price" size="10" maxlength="10">
             <br>
             <input type="hidden" name="command" value="Product">
             <input type="hidden" name="action" value="insert.confirm">

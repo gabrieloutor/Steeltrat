@@ -23,7 +23,7 @@
                 </c:forEach>
             </select>
             <br>
-            <label for="name_employee">Nome:</label> <input type="text" readonly name="name_employee" id="name_employee" size="30">
+            <label for="name_employee">Nome:</label> <input type="text" readonly name="name_employee" id="name_employee" size="35" maxlength="35">
             <br>
             <label for="cpf_employee">Cpf:</label> <input type="text" readonly name="cpf_employee" id="cpf_employee" size="11" maxlength="11">
             <br>

@@ -23,7 +23,7 @@
                 </c:forEach>
             </select>
             <br>
-            <label for="name_departament">Novo name do Departamento: </label> <input type="text" readonly id="name_departament" name="name_departament" size="30">
+            <label for="name_departament">Novo name do Departamento: </label> <input type="text" readonly id="name_departament" name="name_departament" size="35" maxlength="35">
             <br>
             <input type="hidden" name="command" value="Departament">
             <input type="hidden" name="action" value="updateById">

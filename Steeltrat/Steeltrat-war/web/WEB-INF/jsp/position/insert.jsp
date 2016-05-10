@@ -13,7 +13,7 @@
         <%@include file="../menu.jspf" %>
         <h3>Inserir Cargo</h3>
         <form method="POST" id="formInsert" action="home">
-            <label for="namePosition">Nome Cargo:</label> <input type="text" name="name_position" id="name_position" size="30">
+            <label for="namePosition">Nome Cargo:</label> <input type="text" name="name_position" id="name_position" size="35" maxlength="35">
             <br>
             <input type="hidden" name="command" value="Position">
             <input type="hidden" name="action" value="insert.confirm">

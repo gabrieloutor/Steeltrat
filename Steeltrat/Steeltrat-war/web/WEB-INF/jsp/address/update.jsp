@@ -23,9 +23,9 @@
                 </c:forEach>
             </select>
             <br>
-            <label for="zipcode">Novo C.E.P. do Endereço </label> <input type="text" readonly id="zipcode" name="zipcode" size="30" maxlength="8">
+            <label for="zipcode">Novo C.E.P. do Endereço </label> <input type="text" readonly id="zipcode" name="zipcode" size="8" maxlength="8">
             <br>
-            <label for="number_address">Número do Endereço</label> <input type="tel" readonly name="number_address" id="number_address" size="10">
+            <label for="number_address">Número do Endereço</label> <input type="number" readonly name="number_address" id="number_address" size="10" maxlength="10">
             <br>
             <input type="hidden" name="command" value="Address">
             <input type="hidden" name="action" value="updateById">

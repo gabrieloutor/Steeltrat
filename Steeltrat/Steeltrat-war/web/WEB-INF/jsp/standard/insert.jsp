@@ -13,9 +13,9 @@
         <%@include file="../menu.jspf" %>
         <h3>Inserir Norma</h3>
         <form method="POST" id="formInsert" action="home" >
-            <label for="name_standard">Nome:</label> <input type="text" name="name_standard" id="name_standard" size="30" onchange="myFunctionTwo()">
+            <label for="name_standard">Nome:</label> <input type="text" name="name_standard" id="name_standard" onchange="myFunctionTwo()" size="60" maxlength="60">
             <br>
-            <label for="mark_standard">Observação da Norma:</label> <input type="tel" readonly name="mark_standard" id="mark_standard" size="30">
+            <label for="mark_standard">Observação da Norma:</label> <textarea name="mark_standard" id="mark_standard" readonly maxlength="150" size="150" ></textarea>
             <br>
             <input type="hidden" name="command" value="Standard">
             <input type="hidden" name="action" value="insert.confirm">

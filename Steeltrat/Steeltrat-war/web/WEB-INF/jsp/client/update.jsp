@@ -23,9 +23,9 @@
                 </c:forEach>
             </select>
             <br>
-            <label for="name_client">Novo name do Cliente: </label> <input type="text" readonly id="name_client" name="name_client" size="30">
+            <label for="name_client">Novo name do Cliente: </label> <input type="text" readonly id="name_client" name="name_client" size="60" maxlength="60">
             <br>
-            <label for="telephone_client">Telefone:</label> <input type="number" readonly name="telephone_client" id="telephone_client" size="30" maxlength="19">
+            <label for="telephone_client">Telefone:</label> <input type="number" readonly name="telephone_client" id="telephone_client" size="19" maxlength="19">
             <br>
             <label for="addresses">Endereços:&nbsp;</label>
             <select name="addresses" id="addresses" disabled>

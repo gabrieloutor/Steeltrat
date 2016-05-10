@@ -13,9 +13,9 @@
         <%@include file="../menu.jspf" %>
         <h3>Inserir Endereço</h3>
         <form method="POST" id="formInsert" action="home" >
-            <label for="zipcode">C.E.P.:</label> <input type="text" name="zipcode" id="zipcode" size="30" maxlength="8" onchange="myFunctionTwo()">
+            <label for="zipcode">C.E.P.:</label> <input type="text" name="zipcode" id="zipcode" onchange="myFunctionTwo()" size="8" maxlength="8">
             <br>
-            <label for="number_address">Número do Endereço:</label> <input type="number" readonly name="number_address" id="number_address" size="10">
+            <label for="number_address">Número do Endereço:</label> <input type="number" readonly name="number_address" id="number_address" size="10" maxlength="10">
             <br>
             <input type="hidden" name="command" value="Address">
             <input type="hidden" name="action" value="insert.confirm">

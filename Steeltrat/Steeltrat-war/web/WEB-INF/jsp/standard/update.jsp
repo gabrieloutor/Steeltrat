@@ -23,9 +23,9 @@
                 </c:forEach>
             </select>
             <br>
-            <label for="name_standard">Novo name: </label> <input type="text" readonly id="name_standard" name="name_standard" size="30">
+            <label for="name_standard">Novo name: </label> <input type="text" readonly id="name_standard" name="name_standard" size="60" maxlength="60">
             <br>
-            <label for="mark_standard">Observação do Norma:</label> <input type="tel" readonly name="mark_standard" id="mark_standard" size="30">
+            <label for="mark_standard">Observação do Norma:</label> <textarea name="mark_standard" id="mark_standard" readonly maxlength="150" size="150" ></textarea>
             <br>
             <input type="hidden" name="command" value="Standard">
             <input type="hidden" name="action" value="updateById">

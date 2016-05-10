@@ -13,7 +13,7 @@
         <%@include file="../menu.jspf" %>
         <h3>Inserir Recebimento</h3>
         <form method="POST" id="formInsert" action="home">
-            <label for="number_receipt">Nr Recebimento:</label> <input type="number" readonly value="${number_receipt}" name="number_receipt" id="number_receipt" size="30" onchange="myFunctionTwo()">
+            <label for="number_receipt">Nr Recebimento:</label> <input type="number" readonly value="${number_receipt}" name="number_receipt" id="number_receipt" size="10" onchange="myFunctionTwo()">
             <br>
             <label for="client">Cliente: </label>
             <select name="clients" id="clients">

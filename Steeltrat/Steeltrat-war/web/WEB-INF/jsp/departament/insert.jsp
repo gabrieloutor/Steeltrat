@@ -13,7 +13,7 @@
         <%@include file="../menu.jspf" %>
         <h3>Inserir Departamento</h3>
         <form method="POST" id="formInsert" action="home">
-            <label for="name_departament">Nome do Departamento:</label> <input type="text" name="name_departament" id="name_departament" size="30">
+            <label for="name_departament">Nome do Departamento:</label> <input type="text" name="name_departament" id="name_departament" size="35" maxlength="35">
             <br>
             <input type="hidden" name="command" value="Departament">
             <input type="hidden" name="action" value="insert.confirm">

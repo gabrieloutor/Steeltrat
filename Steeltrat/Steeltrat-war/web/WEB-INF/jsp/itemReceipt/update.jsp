@@ -28,17 +28,17 @@
                 <option value="">&#45;&#45; Selecione o Nr do Item &#45;&#45;</option>
             </select>
             <br>
-            <label for="nf_client">Nf Cliente:</label> <input type="text" readonly name="nf_client" id="nf_client" size="10">
+            <label for="nf_client">Nf Cliente:</label> <input type="text" readonly name="nf_client" id="nf_client" size="15" maxlength="15">
             <br>
-            <label for="order_client">Pedido Cliente:</label> <input type="text" readonly name="order_client" id="order_client" size="10">
+            <label for="order_client">Pedido Cliente:</label> <input type="text" readonly name="order_client" id="order_client" size="25" maxlength="25">
             <br>
-            <label for="amount_piece">Quantidade de Peças:</label> <input type="number" readonly name="amount_piece" id="amount_piece" size="10">
+            <label for="amount_piece">Quantidade de Peças:</label> <input type="number" readonly name="amount_piece" id="amount_piece" size="10" maxlength="10">
             <br>
-            <label for="amount_specimen">Quantidade de Corpo de Prova:</label> <input type="number" readonly name="amount_specimen" id="amount_specimen" size="10">
+            <label for="amount_specimen">Quantidade de Corpo de Prova:</label> <input type="number" readonly name="amount_specimen" id="amount_specimen" size="10" maxlength="10">
             <br>
-            <label for="weight">Peso:</label> <input type="number" readonly name="weight" id="weight" size="10">
+            <label for="weight">Peso:</label> <input type="number" readonly name="weight" id="weight" size="10" maxlength="10">
             <br>
-            <label for="number_transport">Corrida:</label> <input type="number" readonly name="number_transport" id="number_transport" size="10">
+            <label for="number_transport">Corrida:</label> <input type="number" readonly name="number_transport" id="number_transport" size="10" maxlength="10">
             <br>
             <label for="product">Produto:</label>
             <select name="products" id="products" disabled>
@@ -80,7 +80,7 @@
                 </c:forEach>
             </select>
             <br>
-            <label for="mark_item_receipt">Observação:</label> <input type="text" readonly name="mark_item_receipt" id="mark_item_receipt" size="30">
+            <label for="mark_item_receipt">Observação:</label> <textarea name="mark_item_receipt" id="mark_item_receipt" readonly maxlength="150" size="150" ></textarea>
             <br>
             <label for="date_item_receipt">Data de Recebimento:</label> <input type="date" readonly name="date_item_receipt" id="date_item_receipt" size="20" maxlength="20">
             <br>

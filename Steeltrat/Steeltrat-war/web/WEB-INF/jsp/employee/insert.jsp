@@ -13,7 +13,7 @@
         <%@include file="../menu.jspf" %>
         <h3>Inserir Funcionário</h3>
         <form method="POST" id="formInsert" action="home">
-            <label for="name_employee">Nome:</label> <input type="text" name="name_employee" id="name_employee" size="30" onchange="myFunctionTwo()">
+            <label for="name_employee">Nome:</label> <input type="text" name="name_employee" id="name_employee" onchange="myFunctionTwo()" size="35" maxlength="35">
             <br>
             <label for="cpf_employee">Cpf:</label> <input type="text" readonly name="cpf_employee" id="cpf_employee" size="11" maxlength="11">
             <br>
