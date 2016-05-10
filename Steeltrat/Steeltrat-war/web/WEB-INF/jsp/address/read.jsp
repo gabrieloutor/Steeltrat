@@ -12,9 +12,9 @@
         <%@include file="../section.jspf" %>
         <%@include file="../menu.jspf" %>
         <h3>Endereços&nbsp;&#45;&nbsp;Operações</h3>
-        <div id="returnMsgSuccessfully">${returnMsgSuccessfully}</div>
+        <div class="returnMsgSuccessfully">${returnMsgSuccessfully}</div>
         ${returnMsgSuccessfully=null}
-        <div id="returnMsgError">${returnMsgError}</div>
+        <div class="returnMsgError">${returnMsgError}</div>
         ${returnMsgError=null}
         <table style="width:100%">
             <tr>

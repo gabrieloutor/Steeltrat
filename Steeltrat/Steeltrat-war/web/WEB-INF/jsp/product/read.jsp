@@ -12,7 +12,7 @@
         <%@include file="../section.jspf" %>
         <%@include file="../menu.jspf" %>
         <h3>Produtos&nbsp;&#45;&nbsp;Operações</h3>
-        <div id="returnMsgSuccessfully">${returnMsgSuccessfully}</div>
+        <div class="returnMsgSuccessfully">${returnMsgSuccessfully}</div>
         ${returnMsgSuccessfully=null}
         <div id="returnMsgError">${returnMsgError}</div>
         ${returnMsgError=null}

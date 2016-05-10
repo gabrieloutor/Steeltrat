@@ -11,17 +11,19 @@
         <link rel="stylesheet" href="css/login.css">
     </head>
     <body>
-        <div id="returnMsgSuccessfully">${returnMsgSuccessfully}</div>
-        ${returnMsgSuccessfully=null}
+        <c:if test="${returnMsgSuccessfully!=null}">
+            <div class="returnMsgSuccessfully">${returnMsgSuccessfully}</div>
+            ${returnMsgSuccessfully=null}
+        </c:if>
         <form class="login" action="home" method="POST">
             <fieldset>
                 <legend class="legend">Login</legend>
                 <div class="input">
-                    <input type="text" placeholder="Usuário" name="username" required />
+                    <input type="text" placeholder="Usuário" name="username" maxlength="15" required />
                     <span><i class="fa fa-user"></i></span>
                 </div>
                 <div class="input">
-                    <input type="password" placeholder="Senha" name="password" required />
+                    <input type="password" placeholder="Senha" name="password" maxlength="32" required />
                     <span><i class="fa fa-lock"></i></span>
                 </div>
                 <button type="submit" class="submit" id="submit"><i class="fa fa-long-arrow-right" id="button"></i></button>
