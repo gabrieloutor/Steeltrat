@@ -183,3 +183,11 @@
         </c:choose>
             </ul>
         </nav>
+<c:if test="${returnMsgSuccessfully != null}">
+    <div class="returnMsgSuccessfully">${returnMsgSuccessfully}</div>
+    ${returnMsgSuccessfully=null}
+</c:if>
+<c:if test="${returnMsgError != null}">
+    <div class="returnMsgError">${returnMsgError}</div>
+    ${returnMsgError=null}
+</c:if>

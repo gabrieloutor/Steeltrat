@@ -13,8 +13,6 @@
             <%@include file="section.jspf" %>
             <%@include file="menu.jspf" %>
         </c:if>
-        <div id="returnMsgError">${returnMsgError}</div>
-        ${returnMsgError=null}
         <!--<w:weather appid="d29ad1fdab1ac80d86ae9837a42cfd7e" city="Barueri" units="metric"></w:weather>-->
     </body>
 </html>
