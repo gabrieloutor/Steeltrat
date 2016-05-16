@@ -1,6 +1,8 @@
 package ind.br.vedax.command;
 
+import ind.br.vedax.enums.LogEnum;
 import ind.br.vedax.enums.ReturnMsgEnum;
+import ind.br.vedax.jms.ProducerBean;
 import ind.br.vedax.model.dao.ProductDAO;
 import ind.br.vedax.model.entities.Product;
 import java.util.logging.Level;
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class ProductCommand implements Command {
+    ProducerBean producerBean = lookupProducerBeanBean();
 
     ProductDAO productDAO = lookupProductDAOBean();
 
@@ -39,10 +42,17 @@ public class ProductCommand implements Command {
             productDAO.setEm(em);
             em.getTransaction().begin();
         } catch (Exception ex) {
+            /* LOG DO SISTEMA */
+            producerBean.sendMessage(LogEnum.CONNECT_ERROR_MESSAGE.toString());
+            
+            /* "SETA" ATRIBUTOS */
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            
+            /* REDIRECIONA PARA PÁGINA DESEJADA */
             returnPage = "index.jsp";
             return;
         }
+        
         /* INICIO LÓGICA */
         String action = request.getParameter("action");
         Product product = new Product();
@@ -129,7 +139,13 @@ public class ProductCommand implements Command {
             em.close();
             emf.close();
         } catch (Exception ex) {
+            /* LOG DO SISTEMA */
+            producerBean.sendMessage(LogEnum.CONNECT_ERROR_MESSAGE.toString());
+            
+            /* "SETA" ATRIBUTOS */
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            
+            /* REDIRECIONA PARA PÁGINA DESEJADA */
             returnPage = "index.jsp";
         }
     }
@@ -143,6 +159,16 @@ public class ProductCommand implements Command {
         try {
             Context c = new InitialContext();
             return (ind.br.vedax.model.dao.ProductDAO) c.lookup("java:global/Steeltrat/Steeltrat-ejb/ProductDAO!ind.br.vedax.model.dao.ProductDAO");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private ProducerBean lookupProducerBeanBean() {
+        try {
+            Context c = new InitialContext();
+            return (ProducerBean) c.lookup("java:global/Steeltrat/Steeltrat-ejb/ProducerBean!ind.br.vedax.jms.ProducerBean");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

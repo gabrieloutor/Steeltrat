@@ -3,8 +3,10 @@ package ind.br.vedax.command;
 import ind.br.vedax.api.entities.Place;
 import ind.br.vedax.api.webservice.ConnectionManager;
 import ind.br.vedax.api.webservice.JSONMapsParser;
+import ind.br.vedax.enums.LogEnum;
 import ind.br.vedax.enums.ReturnMsgEnum;
 import ind.br.vedax.exceptions.DBException;
+import ind.br.vedax.jms.ProducerBean;
 import ind.br.vedax.model.dao.AddressDAO;
 import ind.br.vedax.model.dao.ClientDAO;
 import ind.br.vedax.model.entities.Client;
@@ -20,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class ClientCommand implements Command {
+    ProducerBean producerBean = lookupProducerBeanBean();
 
     AddressDAO addressDAO = lookupAddressDAOBean();
     ClientDAO clientDAO = lookupClientDAOBean();
@@ -46,9 +49,15 @@ public class ClientCommand implements Command {
             clientDAO.setEm(em);
             em.getTransaction().begin();
         } catch (Exception ex) {
+            /* LOG DO SISTEMA */
+            producerBean.sendMessage(LogEnum.CONNECT_ERROR_MESSAGE.toString());
+            
+            /* "SETA" ATRIBUTOS */
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            
+            /* REDIRECIONA PARA PÁGINA DESEJADA */
             returnPage = "index.jsp";
-            return ;
+            return;
         }
 
         /* INICIO LÓGICA */
@@ -170,7 +179,13 @@ public class ClientCommand implements Command {
             em.close();
             emf.close();
         } catch (Exception ex) {
+            /* LOG DO SISTEMA */
+            producerBean.sendMessage(LogEnum.CONNECT_ERROR_MESSAGE.toString());
+            
+            /* "SETA" ATRIBUTOS */
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            
+            /* REDIRECIONA PARA PÁGINA DESEJADA */
             returnPage = "index.jsp";
         }
     }
@@ -194,6 +209,16 @@ public class ClientCommand implements Command {
         try {
             Context c = new InitialContext();
             return (AddressDAO) c.lookup("java:global/Steeltrat/Steeltrat-ejb/AddressDAO!ind.br.vedax.model.dao.AddressDAO");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private ProducerBean lookupProducerBeanBean() {
+        try {
+            Context c = new InitialContext();
+            return (ProducerBean) c.lookup("java:global/Steeltrat/Steeltrat-ejb/ProducerBean!ind.br.vedax.jms.ProducerBean");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

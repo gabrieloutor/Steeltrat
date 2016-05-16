@@ -1,6 +1,8 @@
 package ind.br.vedax.command;
 
+import ind.br.vedax.enums.LogEnum;
 import ind.br.vedax.enums.ReturnMsgEnum;
+import ind.br.vedax.jms.ProducerBean;
 import ind.br.vedax.model.dao.PositionSteeltratDAO;
 import ind.br.vedax.model.entities.PositionSteeltrat;
 import java.util.logging.Level;
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class PositionCommand implements Command {
+    ProducerBean producerBean = lookupProducerBeanBean();
 
     PositionSteeltratDAO positionSteeltratDAO = lookupPositionSteeltratDAOBean();
     private EntityManagerFactory emf;
@@ -37,11 +40,18 @@ public class PositionCommand implements Command {
             em = emf.createEntityManager();
             positionSteeltratDAO.setEm(em);
             em.getTransaction().begin();
-            } catch (Exception ex) {
+        } catch (Exception ex) {
+            /* LOG DO SISTEMA */
+            producerBean.sendMessage(LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+            /* "SETA" ATRIBUTOS */
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+            /* REDIRECIONA PARA PÁGINA DESEJADA */
             returnPage = "index.jsp";
             return;
         }
+
         /* INICIO LÓGICA */
         String action = request.getParameter("action");
         PositionSteeltrat position = new PositionSteeltrat();
@@ -126,7 +136,13 @@ public class PositionCommand implements Command {
             em.close();
             emf.close();
         } catch (Exception ex) {
+            /* LOG DO SISTEMA */
+            producerBean.sendMessage(LogEnum.CONNECT_ERROR_MESSAGE.toString());
+            
+            /* "SETA" ATRIBUTOS */
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            
+            /* REDIRECIONA PARA PÁGINA DESEJADA */
             returnPage = "index.jsp";
         }
     }
@@ -140,6 +156,16 @@ public class PositionCommand implements Command {
         try {
             Context c = new InitialContext();
             return (PositionSteeltratDAO) c.lookup("java:global/Steeltrat/Steeltrat-ejb/PositionSteeltratDAO!ind.br.vedax.model.dao.PositionSteeltratDAO");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private ProducerBean lookupProducerBeanBean() {
+        try {
+            Context c = new InitialContext();
+            return (ProducerBean) c.lookup("java:global/Steeltrat/Steeltrat-ejb/ProducerBean!ind.br.vedax.jms.ProducerBean");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

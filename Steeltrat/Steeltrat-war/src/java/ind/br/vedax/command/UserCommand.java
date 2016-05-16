@@ -1,6 +1,9 @@
 package ind.br.vedax.command;
 
+import ind.br.vedax.enums.LogEnum;
 import ind.br.vedax.enums.ReturnMsgEnum;
+import ind.br.vedax.jms.ProducerBean;
+import ind.br.vedax.jms.ProducerBeanLocal;
 import ind.br.vedax.model.dao.UserSteeltratDAO;
 import ind.br.vedax.model.dao.EmployeeDAO;
 import ind.br.vedax.model.entities.UserSteeltrat;
@@ -18,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class UserCommand implements Command {
+    ProducerBean producerBean = lookupProducerBeanBean();
 
     EmployeeDAO employeeDAO = lookupEmployeeDAOBean();
     UserSteeltratDAO userSteeltratDAO = lookupUserSteeltratDAOBean();
@@ -46,7 +50,13 @@ public class UserCommand implements Command {
             userSteeltratDAO.setEm(em);
             em.getTransaction().begin();
         } catch (Exception ex) {
+            /* LOG DO SISTEMA */
+            producerBean.sendMessage(LogEnum.CONNECT_ERROR_MESSAGE.toString());
+            
+            /* "SETA" ATRIBUTOS */
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            
+            /* REDIRECIONA PARA PÁGINA DESEJADA */
             returnPage = "index.jsp";
             return;
         }
@@ -60,6 +70,8 @@ public class UserCommand implements Command {
                 String password = request.getParameter("password");
 
                 if (authorize(username, password)) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(employee.getNameEmployee() + LogEnum.LOGIN_MESSAGE);
                     request.getSession().setAttribute("resultado", true);
                     request.getSession().setAttribute("employee", employee);
                     username = "";
@@ -75,6 +87,7 @@ public class UserCommand implements Command {
                     Cookie cookie2 = new Cookie("password", password);
                     cookie2.setMaxAge(60 * 60 * 24 * 7);
                     response.addCookie(cookie2);
+                    
                     returnPage = "WEB-INF/jsp/home.jsp";
                 } else {
                     request.getSession().invalidate();
@@ -82,6 +95,9 @@ public class UserCommand implements Command {
                 }
                 break;
             case "logout":
+                /* LOG DO SISTEMA */
+                producerBean.sendMessage(employee.getNameEmployee() + LogEnum.LOGOUT_MESSAGE);
+                
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.LOGOUT_MESSAGE.toString());
                 break;
@@ -95,6 +111,9 @@ public class UserCommand implements Command {
 
                 /* PERSITE O OBJETO NO BANCO */
                 userSteeltratDAO.create(user);
+                
+                /* LOG DO SISTEMA */
+                producerBean.sendMessage(employee.getNameEmployee() + LogEnum.CREATE_MESSAGE);
 
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("users", userSteeltratDAO.read());
@@ -166,7 +185,13 @@ public class UserCommand implements Command {
             em.close();
             emf.close();
         } catch (Exception ex) {
+            /* LOG DO SISTEMA */
+            producerBean.sendMessage(LogEnum.CONNECT_ERROR_MESSAGE.toString());
+            
+            /* "SETA" ATRIBUTOS */
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            
+            /* REDIRECIONA PARA PÁGINA DESEJADA */
             returnPage = "index.jsp";
         }
     }
@@ -198,6 +223,16 @@ public class UserCommand implements Command {
         try {
             Context c = new InitialContext();
             return (ind.br.vedax.model.dao.EmployeeDAO) c.lookup("java:global/Steeltrat/Steeltrat-ejb/EmployeeDAO!ind.br.vedax.model.dao.EmployeeDAO");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private ProducerBean lookupProducerBeanBean() {
+        try {
+            Context c = new InitialContext();
+            return (ProducerBean) c.lookup("java:global/Steeltrat/Steeltrat-ejb/ProducerBean!ind.br.vedax.jms.ProducerBean");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

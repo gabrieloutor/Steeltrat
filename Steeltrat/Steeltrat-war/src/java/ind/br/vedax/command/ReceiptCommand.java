@@ -1,6 +1,8 @@
 package ind.br.vedax.command;
 
+import ind.br.vedax.enums.LogEnum;
 import ind.br.vedax.enums.ReturnMsgEnum;
+import ind.br.vedax.jms.ProducerBean;
 import ind.br.vedax.model.dao.ClientDAO;
 import ind.br.vedax.model.dao.ReceiptDAO;
 import ind.br.vedax.model.entities.Receipt;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class ReceiptCommand implements Command {
+    ProducerBean producerBean = lookupProducerBeanBean();
 
     ReceiptDAO receiptDAO = lookupReceiptDAOBean();
     ClientDAO clientDAO = lookupClientDAOBean();
@@ -42,10 +45,17 @@ public class ReceiptCommand implements Command {
             clientDAO.setEm(em);
             em.getTransaction().begin();
         } catch (Exception ex) {
+            /* LOG DO SISTEMA */
+            producerBean.sendMessage(LogEnum.CONNECT_ERROR_MESSAGE.toString());
+            
+            /* "SETA" ATRIBUTOS */
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            
+            /* REDIRECIONA PARA PÁGINA DESEJADA */
             returnPage = "index.jsp";
             return;
         }
+        
         /* INICIO LÓGICA */
         String action = request.getParameter("action");
         Receipt receipt = new Receipt();
@@ -136,7 +146,13 @@ public class ReceiptCommand implements Command {
             em.close();
             emf.close();
         } catch (Exception ex) {
+            /* LOG DO SISTEMA */
+            producerBean.sendMessage(LogEnum.CONNECT_ERROR_MESSAGE.toString());
+            
+            /* "SETA" ATRIBUTOS */
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+            
+            /* REDIRECIONA PARA PÁGINA DESEJADA */
             returnPage = "index.jsp";
         }
     }
@@ -160,6 +176,16 @@ public class ReceiptCommand implements Command {
         try {
             Context c = new InitialContext();
             return (ReceiptDAO) c.lookup("java:global/Steeltrat/Steeltrat-ejb/ReceiptDAO!ind.br.vedax.model.dao.ReceiptDAO");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private ProducerBean lookupProducerBeanBean() {
+        try {
+            Context c = new InitialContext();
+            return (ProducerBean) c.lookup("java:global/Steeltrat/Steeltrat-ejb/ProducerBean!ind.br.vedax.jms.ProducerBean");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
