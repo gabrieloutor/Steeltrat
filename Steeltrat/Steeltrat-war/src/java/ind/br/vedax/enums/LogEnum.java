@@ -11,6 +11,13 @@ public enum LogEnum {
         }
     },
     
+    READ_MESSAGE{
+        @Override
+        public String toString(){
+            return " leu dados no sistema!";
+        }
+    },
+    
     UPDATE_MESSAGE{
         @Override
         public String toString(){
@@ -42,7 +49,7 @@ public enum LogEnum {
     ERROR_MESSAGE{
         @Override
         public String toString(){
-            return "Sistema gerou erro com o usuário: ";
+            return "Sistema gerou erro";
         }
     },
     

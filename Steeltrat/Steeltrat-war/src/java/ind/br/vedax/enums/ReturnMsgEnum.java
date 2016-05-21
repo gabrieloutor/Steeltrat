@@ -11,6 +11,13 @@ public enum ReturnMsgEnum {
         }
     },
     
+    READ_MESSAGE{
+        @Override
+        public String toString(){
+            return "Dados lidos com sucesso!";
+        }
+    },
+    
     UPDATE_MESSAGE{
         @Override
         public String toString(){

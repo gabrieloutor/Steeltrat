@@ -67,4 +67,12 @@ public class UserSteeltratDAO implements GenericDAO<UserSteeltrat>{
         }
         return (UserSteeltrat)query.getSingleResult();
     }
+    
+    public UserSteeltrat readByName(String username){
+        Query query = em.createNamedQuery("UserSteeltrat.findByUsername", UserSteeltrat.class).setParameter("username", username);
+        if(query.getResultList().isEmpty()){
+            return null;
+        }
+        return (UserSteeltrat)query.getSingleResult();
+    }
 }
