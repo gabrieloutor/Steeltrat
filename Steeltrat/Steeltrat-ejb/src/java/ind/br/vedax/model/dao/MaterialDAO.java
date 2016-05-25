@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 /**
  *
@@ -57,5 +58,13 @@ public class MaterialDAO implements GenericDAO<Material>{
     @Override
     public void setEm(EntityManager em) {
         this.em = em;
+    }
+    
+    public Material readByName(String nameMaterial){
+        Query query = em.createNamedQuery("PositionSteeltrat.findByNameMaterial", Material.class).setParameter("nameMaterial", nameMaterial);
+        if(query.getResultList().isEmpty()){
+            return null;
+        }
+        return (Material)query.getSingleResult();
     }
 }

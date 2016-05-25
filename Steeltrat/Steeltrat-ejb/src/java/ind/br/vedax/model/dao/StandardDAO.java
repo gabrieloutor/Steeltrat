@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 /**
  *
@@ -57,5 +58,13 @@ public class StandardDAO implements GenericDAO<Standard>{
     @Override
     public void setEm(EntityManager em) {
         this.em = em;
+    }
+    
+    public Standard readByName(String nameStandard){
+        Query query = em.createNamedQuery("Standard.findByNameStandard", Standard.class).setParameter("nameStandard", nameStandard);
+        if(query.getResultList().isEmpty()){
+            return null;
+        }
+        return (Standard)query.getSingleResult();
     }
 }

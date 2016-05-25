@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 /**
  *
@@ -57,5 +58,13 @@ public class ClientDAO implements GenericDAO<Client>{
     @Override
     public void setEm(EntityManager em) {
         this.em = em;
+    }
+    
+    public Client readByName(String nameClient){
+        Query query = em.createNamedQuery("Client.findByNameClient", Client.class).setParameter("nameClient", nameClient);
+        if(query.getResultList().isEmpty()){
+            return null;
+        }
+        return (Client)query.getSingleResult();
     }
 }

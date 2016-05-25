@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 /**
  *
@@ -57,5 +58,13 @@ public class PositionSteeltratDAO implements GenericDAO<PositionSteeltrat>{
     @Override
     public void setEm(EntityManager em) {
         this.em = em;
+    }
+    
+    public PositionSteeltrat readByName(String namePosition){
+        Query query = em.createNamedQuery("PositionSteeltrat.findByNamePosition", PositionSteeltrat.class).setParameter("namePosition", namePosition);
+        if(query.getResultList().isEmpty()){
+            return null;
+        }
+        return (PositionSteeltrat)query.getSingleResult();
     }
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 /**
  *
@@ -65,5 +66,13 @@ public class EmployeeDAO implements GenericDAO<Employee>{
             throw new DBException(DBExceptionEnum.FIND_ERROR);
         }
         return e;
+    }
+    
+    public Employee readByCpf(String cpf){
+        Query query = em.createNamedQuery("Employee.findByCpf", Employee.class).setParameter("cpf", cpf);
+        if(query.getResultList().isEmpty()){
+            return null;
+        }
+        return (Employee)query.getSingleResult();
     }
 }

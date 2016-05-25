@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 /**
  *
@@ -57,5 +58,13 @@ public class ProductDAO implements GenericDAO<Product>{
     @Override
     public void setEm(EntityManager em) {
         this.em = em;
+    }
+    
+    public Product readByDescription(String descriptionProduct){
+        Query query = em.createNamedQuery("Product.findByDescriptionProduct", Product.class).setParameter("descriptionProduct", descriptionProduct);
+        if(query.getResultList().isEmpty()){
+            return null;
+        }
+        return (Product)query.getSingleResult();
     }
 }

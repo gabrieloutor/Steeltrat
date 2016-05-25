@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 /**
  *
@@ -57,5 +58,13 @@ public class AddressDAO implements GenericDAO<Address>{
     @Override
     public void setEm(EntityManager em) {
         this.em = em;
+    }
+    
+    public Address readByAddress(String zipcode, Integer numberAddress){
+        Query query = em.createNamedQuery("Address.findByZipcodeAndNumberAddress", Address.class).setParameter("zipcode", zipcode).setParameter("numberAddress", numberAddress);
+        if(query.getResultList().isEmpty()){
+            return null;
+        }
+        return (Address)query.getSingleResult();
     }
 }

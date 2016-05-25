@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 /**
  *
@@ -57,5 +58,13 @@ public class DepartamentDAO implements GenericDAO<Departament>{
     @Override
     public void setEm(EntityManager em) {
         this.em = em;
+    }
+    
+    public Departament readByName(String nameDepartament){
+        Query query = em.createNamedQuery("Departament.findByNameDepartament", Departament.class).setParameter("nameDepartament", nameDepartament);
+        if(query.getResultList().isEmpty()){
+            return null;
+        }
+        return (Departament)query.getSingleResult();
     }
 }
