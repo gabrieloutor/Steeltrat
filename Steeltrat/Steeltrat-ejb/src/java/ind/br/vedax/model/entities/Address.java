@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Address.findAll", query = "SELECT a FROM Address a"),
     @NamedQuery(name = "Address.findByIdAddress", query = "SELECT a FROM Address a WHERE a.idAddress = :idAddress"),
     @NamedQuery(name = "Address.findByZipcode", query = "SELECT a FROM Address a WHERE a.zipcode = :zipcode"),
+    @NamedQuery(name = "Address.findByZipcodeAndNumberAddress", query = "SELECT a FROM Address a WHERE a.zipcode = :zipcode AND a.numberAddress = :numberAddress"),
     @NamedQuery(name = "Address.findByNumberAddress", query = "SELECT a FROM Address a WHERE a.numberAddress = :numberAddress")})
 public class Address implements Serializable {
     private static final long serialVersionUID = 1L;
