@@ -6,6 +6,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Steeltrat | Funcionário - Inserir</title>
         <link rel="icon" href="img/favicon.ico" />
+        <script src="js/validation.js" type="text/javascript"></script>
         <link href='css/home.css' rel='stylesheet'>
     </head>
     <body>
@@ -13,9 +14,9 @@
         <%@include file="../menu.jspf" %>
         <h3>Inserir Funcionário</h3>
         <form method="POST" id="formInsert" action="home">
-            <label for="name_employee">Nome:</label> <input type="text" name="name_employee" id="name_employee" onchange="myFunctionTwo()" size="35" maxlength="35">
+            <label for="name_employee">Nome:</label> <input type="text" name="name_employee" id="name_employee" onchange="myFunctionTwo()" size="35" maxlength="35" onkeypress="return alpha(event,letters)">
             <br>
-            <label for="cpf_employee">Cpf:</label> <input type="text" readonly name="cpf_employee" id="cpf_employee" size="11" maxlength="11">
+            <label for="cpf_employee">Cpf:</label> <input type="text" readonly name="cpf_employee" id="cpf_employee" size="11" maxlength="11" onkeypress="return alpha(event,numbers)">
             <br>
             <label for="position">Cargo: </label>
             <select name="positions" id="positions" disabled>
@@ -67,7 +68,7 @@
                         name_employee.focus();
                         alert("Digite o Nome do Funcionário");
                         break;
-                    case cpf_employee.value === "":
+                    case cpf_employee.value === "" || cpf_employee.value.length < 11:
                         cpf_employee.focus();
                         alert("Digite o CPF do Funcionário");
                         break;
