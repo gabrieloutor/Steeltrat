@@ -127,6 +127,7 @@ body {
     padding: 5px;
     animation: anim 3s;
     text-transform: uppercase;
+    box-shadow: 0 0 12px #000;
 }
 @keyframes anim{
     0% {opacity:0;}
