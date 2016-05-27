@@ -60,6 +60,27 @@ public enum ReturnMsgEnum {
         }
     },
     
+    CPF_ERROR_MESSAGE{
+        @Override
+        public String toString(){
+            return "Funcionário com esse C.P.F. já existente";
+        }
+    },
+    
+    EMPLOYEE_DELETE_ERROR_MESSAGE{
+        @Override
+        public String toString(){
+            return "Funcionário com esse C.P.F. já existente";
+        }
+    },
+    
+    USER_ERROR_MESSAGE{
+        @Override
+        public String toString(){
+            return "Username já existente";
+        }
+    },
+    
     CONNECT_ERROR_MESSAGE{
         @Override
         public String toString(){

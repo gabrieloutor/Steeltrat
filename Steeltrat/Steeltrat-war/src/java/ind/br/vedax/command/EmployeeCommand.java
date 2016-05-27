@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class EmployeeCommand implements Command {
+
     ProducerBean producerBean = lookupProducerBeanBean();
 
     UserSteeltratDAO userSteeltratDAO = lookupUserSteeltratDAOBean();
@@ -53,99 +54,208 @@ public class EmployeeCommand implements Command {
         } catch (Exception ex) {
             /* LOG DO SISTEMA */
             producerBean.sendMessage(LogEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* "SETA" ATRIBUTOS */
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* REDIRECIONA PARA PÁGINA DESEJADA */
             returnPage = "index.jsp";
             return;
         }
-        
+
         /* INICIO LÓGICA */
         String action = request.getParameter("action");
         Employee employee = new Employee();
         switch (action) {
             case "insert":
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("positions", positionSteeltratDAO.read());
-                request.getSession().setAttribute("users", userSteeltratDAO.read());
-                request.getSession().setAttribute("departaments", departamentDAO.read());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("positions", positionSteeltratDAO.read());
+                    request.getSession().setAttribute("users", userSteeltratDAO.read());
+                    request.getSession().setAttribute("departaments", departamentDAO.read());
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/employee/insert.jsp";
                 break;
             case "insert.confirm":
-                /* VARIÁVEIS DO FORM */
-                employee.setNameEmployee(request.getParameter("name_employee"));
-                employee.setIdUser(userSteeltratDAO.readById(Long.parseLong(request.getParameter("users"))));
-                employee.setIdPosition(positionSteeltratDAO.readById(Long.parseLong(request.getParameter("positions"))));
-                employee.setIdDepartament(departamentDAO.readById(Long.parseLong(request.getParameter("departaments"))));
-                employee.setCpf(request.getParameter("cpf_employee"));
+                try {
+                    /* VARIÁVEIS DO FORM */
+                    employee.setNameEmployee(request.getParameter("name_employee"));
+                    employee.setIdUser(userSteeltratDAO.readById(Long.parseLong(request.getParameter("users"))));
+                    employee.setIdPosition(positionSteeltratDAO.readById(Long.parseLong(request.getParameter("positions"))));
+                    employee.setIdDepartament(departamentDAO.readById(Long.parseLong(request.getParameter("departaments"))));
+                    employee.setCpf(request.getParameter("cpf_employee"));
 
-                /* PERSITE O OBJETO NO BANCO */
-                employeeDAO.create(employee);
+                    if ((employeeDAO.readByCpf(employee.getCpf())) != null) {
+                        /* "SETA" ATRIBUTOS */
+                        request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CPF_ERROR_MESSAGE.toString());
 
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("employees", employeeDAO.read());
-                request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
+                        /* REDIRECIONA PARA PÁGINA DESEJADA */
+                        returnPage = "WEB-INF/jsp/employee/insert.jsp";
+                        break;
+                    }
 
-                /* REDIRECIONA PARA PÁGINA DESEJADA */
-                returnPage = "WEB-INF/jsp/employee/read.jsp";
+                    /* PERSITE O OBJETO NO BANCO */
+                    employeeDAO.create(employee);
+
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CREATE_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("employees", employeeDAO.read());
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/employee/read.jsp";
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CREATE_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
+
                 break;
             case "read":
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("employees", employeeDAO.read());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("employees", employeeDAO.read());
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/employee/read.jsp";
                 break;
             case "update":
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("positions", positionSteeltratDAO.read());
-                request.getSession().setAttribute("users", userSteeltratDAO.read());
-                request.getSession().setAttribute("departaments", departamentDAO.read());
-                request.getSession().setAttribute("employees", employeeDAO.read());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("positions", positionSteeltratDAO.read());
+                    request.getSession().setAttribute("users", userSteeltratDAO.read());
+                    request.getSession().setAttribute("departaments", departamentDAO.read());
+                    request.getSession().setAttribute("employees", employeeDAO.read());
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/employee/update.jsp";
                 break;
             case "updateById":
-                /* CRIA OBJETO */
-                employee = employeeDAO.readById(Long.parseLong(request.getParameter("employees")));
+                try {
+                    /* CRIA OBJETO */
+                    employee = employeeDAO.readById(Long.parseLong(request.getParameter("employees")));
 
-                /* VARIÁVEIS DO FORM */
-                employee.setNameEmployee(request.getParameter("name_employee"));
-                employee.setIdUser(userSteeltratDAO.readById(Long.parseLong(request.getParameter("users"))));
-                employee.setIdPosition(positionSteeltratDAO.readById(Long.parseLong(request.getParameter("positions"))));
-                employee.setIdDepartament(departamentDAO.readById(Long.parseLong(request.getParameter("departaments"))));
-                employee.setCpf(request.getParameter("cpf_employee"));
+                    /* PERSITE O OBJETO NO BANCO */
+                    if ((employeeDAO.readByCpf(request.getParameter("cpf_employee"))) != null) {
+                        /* "SETA" ATRIBUTOS */
+                        request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CPF_ERROR_MESSAGE.toString());
 
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("employees", employeeDAO.read());
-                request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
+                        /* REDIRECIONA PARA PÁGINA DESEJADA */
+                        returnPage = "WEB-INF/jsp/employee/insert.jsp";
+                        break;
+                    }
 
+                    /* VARIÁVEIS DO FORM */
+                    employee.setNameEmployee(request.getParameter("name_employee"));
+                    employee.setIdUser(userSteeltratDAO.readById(Long.parseLong(request.getParameter("users"))));
+                    employee.setIdPosition(positionSteeltratDAO.readById(Long.parseLong(request.getParameter("positions"))));
+                    employee.setIdDepartament(departamentDAO.readById(Long.parseLong(request.getParameter("departaments"))));
+                    employee.setCpf(request.getParameter("cpf_employee"));
+                    
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("employees", employeeDAO.read());
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/employee/read.jsp";
                 break;
             case "delete":
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("employees", employeeDAO.read());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("employees", employeeDAO.read());
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/employee/delete.jsp";
                 break;
             case "delete.confirm":
-                /* CRIA OBJETO */
-                employee = employeeDAO.readById(Long.parseLong(request.getParameter("employees")));
+                try {
+                    /* CRIA OBJETO */
+                    employee = employeeDAO.readById(Long.parseLong(request.getParameter("employees")));
 
-                /* PERSITE O OBJETO NO BANCO */
-                employeeDAO.delete(employee);
+                    /* PERSITE O OBJETO NO BANCO */
+                    employeeDAO.delete(employee);
 
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("employees", employeeDAO.read());
-                request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("employees", employeeDAO.read());
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
 
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.EMPLOYEE_DELETE_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/employee/read.jsp";
                 break;
@@ -164,10 +274,10 @@ public class EmployeeCommand implements Command {
         } catch (Exception ex) {
             /* LOG DO SISTEMA */
             producerBean.sendMessage(LogEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* "SETA" ATRIBUTOS */
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* REDIRECIONA PARA PÁGINA DESEJADA */
             returnPage = "index.jsp";
         }

@@ -122,7 +122,7 @@ public class UserCommand implements Command {
 
                     if ((userSteeltratDAO.readByName(user.getUsername())) != null) {
                         /* "SETA" ATRIBUTOS */
-                        request.getSession().setAttribute("returnMsgError", "Usuário já existente");
+                        request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.USER_ERROR_MESSAGE.toString());
 
                         /* REDIRECIONA PARA PÁGINA DESEJADA */
                         returnPage = "WEB-INF/jsp/user/insert.jsp";
@@ -199,7 +199,7 @@ public class UserCommand implements Command {
                     /* PERSITE O OBJETO NO BANCO */
                     if ((userSteeltratDAO.readByName(request.getParameter("username"))) != null) {
                         /* "SETA" ATRIBUTOS */
-                        request.getSession().setAttribute("returnMsgError", "Usuário já existente");
+                        request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.USER_ERROR_MESSAGE.toString());
 
                         /* REDIRECIONA PARA PÁGINA DESEJADA */
                         returnPage = "WEB-INF/jsp/user/insert.jsp";
@@ -214,7 +214,7 @@ public class UserCommand implements Command {
                     /* "SETA" ATRIBUTOS */
                     request.getSession().setAttribute("users", userSteeltratDAO.read());
                     request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
-                    
+
                 } catch (Exception ex) {
                     /* LOG DO SISTEMA */
                     producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
@@ -257,6 +257,9 @@ public class UserCommand implements Command {
                     /* PERSITE O OBJETO NO BANCO */
                     userSteeltratDAO.delete(user);
 
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("users", userSteeltratDAO.read());
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
                 } catch (Exception ex) {
                     /* LOG DO SISTEMA */
                     producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
@@ -268,10 +271,6 @@ public class UserCommand implements Command {
                     returnPage = "WEB-INF/jsp/home.jsp";
                     break;
                 }
-
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("users", userSteeltratDAO.read());
-                request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/user/read.jsp";
