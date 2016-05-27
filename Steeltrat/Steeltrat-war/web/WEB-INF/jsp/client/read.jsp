@@ -25,7 +25,7 @@
                     <td>${client.idClient}</td>
                     <td>${client.nameClient}</td>
                     <td>${client.telephone}</td>
-                    <td>${client.idAddress.zipcode} / ${client.idAddress.numberAddress}</td>
+                    <td>${client.idAddress.zipcode.substring(0,5)}-${client.idAddress.zipcode.substring(5,8)} / ${client.idAddress.numberAddress}</td>
                     <td><a href="home?command=Client&action=route&zipcode=${client.idAddress.zipcode}" >Traçar Rota</a></td>
                 </tr>
             </c:forEach>

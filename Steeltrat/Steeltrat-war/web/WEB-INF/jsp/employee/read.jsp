@@ -28,7 +28,7 @@
                     <td>${employee.idUser.username}</td>
                     <td>${employee.idDepartament.nameDepartament}</td>
                     <td>${employee.idPosition.namePosition}</td>
-                    <td>${employee.cpf}</td>
+                    <td>${employee.cpf.substring(0,3)}.${employee.cpf.substring(3,6)}.${employee.cpf.substring(6,9)}-${employee.cpf.substring(9,11)}</td>
                 </tr>
             </c:forEach>
         </table>

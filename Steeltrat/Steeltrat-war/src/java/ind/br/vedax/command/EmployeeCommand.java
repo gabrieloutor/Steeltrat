@@ -96,7 +96,7 @@ public class EmployeeCommand implements Command {
                     employee.setIdPosition(positionSteeltratDAO.readById(Long.parseLong(request.getParameter("positions"))));
                     employee.setIdDepartament(departamentDAO.readById(Long.parseLong(request.getParameter("departaments"))));
                     employee.setCpf(request.getParameter("cpf_employee"));
-
+//                    employee.getCpf().substring(index)
                     if ((employeeDAO.readByCpf(employee.getCpf())) != null) {
                         /* "SETA" ATRIBUTOS */
                         request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CPF_ERROR_MESSAGE.toString());
