@@ -60,6 +60,13 @@ public enum ReturnMsgEnum {
         }
     },
     
+    ADDRESS_ERROR_MESSAGE{
+        @Override
+        public String toString(){
+            return "C.E.P. e Número já existente";
+        }
+    },
+    
     CPF_ERROR_MESSAGE{
         @Override
         public String toString(){
