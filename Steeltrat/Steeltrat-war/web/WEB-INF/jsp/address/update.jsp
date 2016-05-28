@@ -7,6 +7,7 @@
         <title>Steeltrat | Endereço - Atualizar</title>
         <link rel="icon" href="img/favicon.ico" />
         <link href='css/home.css' rel='stylesheet'>
+        <script src="js/validation.js" type="text/javascript"></script>
     </head>
     <body>
         <%@include file="../section.jspf" %>
@@ -23,9 +24,9 @@
                 </c:forEach>
             </select>
             <br>
-            <label for="zipcode">Novo C.E.P. do Endereço </label> <input type="text" readonly id="zipcode" name="zipcode" size="8" maxlength="8">
+            <label for="zipcode">Novo C.E.P. do Endereço </label> <input type="text" readonly id="zipcode" name="zipcode" size="8" maxlength="8" onkeypress="return alpha(event,numbers)">
             <br>
-            <label for="number_address">Número do Endereço</label> <input type="number" readonly name="number_address" id="number_address" size="10" maxlength="10">
+            <label for="number_address">Número do Endereço</label> <input type="number" readonly name="number_address" id="number_address" size="10" maxlength="10" onkeypress="return alpha(event,numbers)">
             <br>
             <input type="hidden" name="command" value="Address">
             <input type="hidden" name="action" value="updateById">

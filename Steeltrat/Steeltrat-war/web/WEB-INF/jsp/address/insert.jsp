@@ -7,15 +7,16 @@
         <title>Steeltrat | Endereço - Inserir</title>
         <link rel="icon" href="img/favicon.ico" />
         <link href='css/home.css' rel='stylesheet'>
+        <script src="js/validation.js" type="text/javascript"></script>
     </head>
     <body>
         <%@include file="../section.jspf" %>
         <%@include file="../menu.jspf" %>
         <h3>Inserir Endereço</h3>
         <form method="POST" id="formInsert" action="home" >
-            <label for="zipcode">C.E.P.:</label> <input type="text" name="zipcode" id="zipcode" onchange="myFunctionTwo()" size="8" maxlength="8">
+            <label for="zipcode">C.E.P.:</label> <input type="text" name="zipcode" id="zipcode" onchange="myFunctionTwo()" size="12" maxlength="8" onkeypress="return alpha(event,numbers)">
             <br>
-            <label for="number_address">Número do Endereço:</label> <input type="number" readonly name="number_address" id="number_address" size="10" maxlength="10">
+            <label for="number_address">Número do Endereço:</label> <input type="number" readonly name="number_address" id="number_address" size="10" max="3" onkeypress="return alpha(event,numbers)">
             <br>
             <input type="hidden" name="command" value="Address">
             <input type="hidden" name="action" value="insert.confirm">
@@ -28,7 +29,7 @@
                 var zipcode = document.getElementById("zipcode");
                 var number_address = document.getElementById("number_address");
                 var formInsert = document.getElementById("formInsert");
-
+                
                 switch (true) {
                     case zipcode.value === "":
                         zipcode.focus();
@@ -46,7 +47,7 @@
             function myFunctionTwo() {
                 var zipcode = document.getElementById("zipcode");
                 var number_address = document.getElementById("number_address");
-
+                
                 switch (true) {
                     case zipcode.value !== "":
                         number_address.removeAttribute("readonly");
