@@ -196,7 +196,6 @@ public class UserCommand implements Command {
                     /* CRIA OBJETO */
                     user = userSteeltratDAO.readById(Long.parseLong(request.getParameter("users")));
 
-                    /* PERSITE O OBJETO NO BANCO */
                     if ((userSteeltratDAO.readByName(request.getParameter("username"))) != null) {
                         /* "SETA" ATRIBUTOS */
                         request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.USER_ERROR_MESSAGE.toString());
@@ -205,6 +204,7 @@ public class UserCommand implements Command {
                         returnPage = "WEB-INF/jsp/user/insert.jsp";
                         break;
                     }
+                    /* PERSITE O OBJETO NO BANCO */
                     user.setUsername(request.getParameter("username"));
                     user.setPassword(request.getParameter("password"));
 
