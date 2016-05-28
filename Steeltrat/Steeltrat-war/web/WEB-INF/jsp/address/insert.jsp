@@ -31,9 +31,9 @@
                 var formInsert = document.getElementById("formInsert");
                 
                 switch (true) {
-                    case zipcode.value === "":
+                    case zipcode.value === "" || zipcode.value.length !== 8:
                         zipcode.focus();
-                        alert("Digite o C.E.P. do Endereço");
+                        alert("C.E.P. inválido");
                         break;
                     case number_address.value === "":
                         number_address.focus();
@@ -49,10 +49,10 @@
                 var number_address = document.getElementById("number_address");
                 
                 switch (true) {
-                    case zipcode.value !== "":
+                    case zipcode.value !== "" && zipcode.value.length === 8:
                         number_address.removeAttribute("readonly");
                         break;
-                    case zipcode.value === "":
+                    case zipcode.value === "" || zipcode.value.length !== 8:
                         number_address.value = "";
                         number_address.setAttribute("readonly");
                         break;

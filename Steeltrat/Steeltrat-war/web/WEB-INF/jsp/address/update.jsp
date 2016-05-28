@@ -67,9 +67,9 @@
                         mySelect.focus();
                         alert("Selecione um C.E.P.");
                         break;
-                    case zipcode.value === "":
+                    case zipcode.value === "" || zipcode.value.length !== 8:
                         zipcode.focus();
-                        alert("Digite o C.E.P. do Endereço");
+                        alert("C.E.P. inválido");
                         break;
                     case number_address.value === "":
                         number_address.focus();
