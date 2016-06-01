@@ -6,6 +6,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Steeltrat | Material - Inserir</title>
         <link rel="icon" href="img/favicon.ico" />
+        <script src="js/validation.js" type="text/javascript"></script>
         <link href="css/home.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
@@ -13,7 +14,7 @@
         <%@include file="../menu.jspf" %>
         <h3>Inserir Material</h3>
         <form method="POST" id="formInsert" action="home" >
-            <label for="name_material">Nome:</label> <input type="text" name="name_material" id="name_material" onchange="myFunctionTwo()" size="60" maxlength="60">
+            <label for="name_material">Nome:</label> <input type="text" name="name_material" id="name_material" onchange="myFunctionTwo()" size="60" maxlength="60" >
             <br>
             <label for="mark_material">Observação do Material:</label> <textarea name="mark_material" id="mark_material" readonly maxlength="150" size="150" ></textarea>
             <br>

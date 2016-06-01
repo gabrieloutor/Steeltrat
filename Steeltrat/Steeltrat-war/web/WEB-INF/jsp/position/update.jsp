@@ -7,6 +7,7 @@
         <title>Steeltrat | Cargo - Atualizar</title>
         <link rel="icon" href="img/favicon.ico" />
         <link href="css/home.css" rel="stylesheet" type="text/css"/>
+        <script src="js/validation.js" type="text/javascript"></script>
     </head>
     <body>
         <%@include file="../section.jspf" %>
@@ -23,7 +24,7 @@
                 </c:forEach>
             </select>
             <br>
-            <label for="namePosition">Novo nome do Cargo: </label> <input type="text" readonly id="name_position" name="name_position" size="35" maxlength="35">
+            <label for="namePosition">Novo nome do Cargo: </label> <input type="text" readonly id="name_position" name="name_position" size="35" maxlength="35" onkeypress="return alpha(event,letters)">
             <br>
             <input type="hidden" name="command" value="Position">
             <input type="hidden" name="action" value="updateById">

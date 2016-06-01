@@ -6,6 +6,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Steeltrat | Material - Atualizar</title>
         <link rel="icon" href="img/favicon.ico" />
+        <script src="js/validation.js" type="text/javascript"></script>
         <link href="css/home.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>

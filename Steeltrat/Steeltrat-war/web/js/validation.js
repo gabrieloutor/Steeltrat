@@ -14,3 +14,8 @@ function alpha(e,allow) {
      k=document.all?parseInt(e.keyCode): parseInt(e.which);
      return (allow.indexOf(String.fromCharCode(k))!==-1);
 }
+function block(e,allow) {
+     var k;
+     k=document.all?parseInt(e.keyCode): parseInt(e.which);
+     return (allow.indexOf(String.fromCharCode(k))!==-1);
+}
