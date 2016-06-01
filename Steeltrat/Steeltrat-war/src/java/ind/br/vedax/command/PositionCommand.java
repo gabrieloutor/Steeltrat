@@ -20,6 +20,8 @@ public class PositionCommand implements Command {
     ProducerBean producerBean = lookupProducerBeanBean();
 
     PositionSteeltratDAO positionSteeltratDAO = lookupPositionSteeltratDAOBean();
+    
+    private final String forLog = "Cargo";
     private EntityManagerFactory emf;
     private EntityManager em;
     private HttpServletRequest request;

@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class DepartamentCommand implements Command {
-
     ProducerBean producerBean = lookupProducerBeanBean();
 
     DepartamentDAO departamentDAO = lookupDepartamentDAOBean();

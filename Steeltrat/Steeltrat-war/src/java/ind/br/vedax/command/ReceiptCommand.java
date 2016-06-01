@@ -23,6 +23,7 @@ public class ReceiptCommand implements Command {
     ReceiptDAO receiptDAO = lookupReceiptDAOBean();
     ClientDAO clientDAO = lookupClientDAOBean();
     
+    private final String forLog = "Recebimento";
     private EntityManagerFactory emf;
     private EntityManager em;
     private HttpServletRequest request;

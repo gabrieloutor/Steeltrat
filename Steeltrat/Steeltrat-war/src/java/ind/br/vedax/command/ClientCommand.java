@@ -5,7 +5,6 @@ import ind.br.vedax.api.webservice.ConnectionManager;
 import ind.br.vedax.api.webservice.JSONMapsParser;
 import ind.br.vedax.enums.LogEnum;
 import ind.br.vedax.enums.ReturnMsgEnum;
-import ind.br.vedax.exceptions.DBException;
 import ind.br.vedax.jms.ProducerBean;
 import ind.br.vedax.model.dao.AddressDAO;
 import ind.br.vedax.model.dao.ClientDAO;
@@ -23,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class ClientCommand implements Command {
-
     ProducerBean producerBean = lookupProducerBeanBean();
 
     AddressDAO addressDAO = lookupAddressDAOBean();

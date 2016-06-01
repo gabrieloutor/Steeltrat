@@ -21,6 +21,7 @@ public class StandardCommand implements Command {
 
     StandardDAO standardDAO = lookupStandardDAOBean();
     
+    private final String forLog = "Norma";
     private EntityManagerFactory emf;
     private EntityManager em;
     private HttpServletRequest request;

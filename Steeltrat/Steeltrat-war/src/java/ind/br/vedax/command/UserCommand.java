@@ -3,7 +3,6 @@ package ind.br.vedax.command;
 import ind.br.vedax.enums.LogEnum;
 import ind.br.vedax.enums.ReturnMsgEnum;
 import ind.br.vedax.jms.ProducerBean;
-import ind.br.vedax.jms.ProducerBeanLocal;
 import ind.br.vedax.model.dao.UserSteeltratDAO;
 import ind.br.vedax.model.dao.EmployeeDAO;
 import ind.br.vedax.model.entities.UserSteeltrat;
@@ -21,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class UserCommand implements Command {
-
     ProducerBean producerBean = lookupProducerBeanBean();
 
     EmployeeDAO employeeDAO = lookupEmployeeDAOBean();

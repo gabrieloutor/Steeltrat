@@ -21,6 +21,7 @@ public class MaterialCommand implements Command {
 
     MaterialDAO materialDAO = lookupMaterialDAOBean();
     
+    private final String forLog = "Material";
     private EntityManagerFactory emf;
     private EntityManager em;
     private HttpServletRequest request;

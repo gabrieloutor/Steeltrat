@@ -21,6 +21,7 @@ public class ProductCommand implements Command {
 
     ProductDAO productDAO = lookupProductDAOBean();
 
+    private final String forLog = "Produto";
     private EntityManagerFactory emf;
     private EntityManager em;
     private HttpServletRequest request;
