@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "ITEMSRECEIPT")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "ItemsReceipt.findAll", query = "SELECT i FROM ItemsReceipt i"),
+    @NamedQuery(name = "ItemsReceipt.findAll", query = "SELECT i FROM ItemsReceipt i ORDER BY i.idReceipt.idReceipt, i.idItemReceipt, i.dateItemReceipt"),
     @NamedQuery(name = "ItemsReceipt.findLastNumberByIdItemReceipt", query = "SELECT MAX(i.idItemReceipt) FROM ItemsReceipt i WHERE i.idReceipt = :idReceipt "),
     @NamedQuery(name = "ItemsReceipt.findByIdItemReceipt", query = "SELECT i FROM ItemsReceipt i WHERE i.idItemReceipt = :idItemReceipt"),
     @NamedQuery(name = "ItemsReceipt.findByNfClient", query = "SELECT i FROM ItemsReceipt i WHERE i.nfClient = :nfClient"),

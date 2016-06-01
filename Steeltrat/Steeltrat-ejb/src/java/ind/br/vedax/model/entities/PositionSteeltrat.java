@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "POSITIONSTEELTRAT")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "PositionSteeltrat.findAll", query = "SELECT p FROM PositionSteeltrat p"),
+    @NamedQuery(name = "PositionSteeltrat.findAll", query = "SELECT p FROM PositionSteeltrat p ORDER BY p.namePosition"),
     @NamedQuery(name = "PositionSteeltrat.findByIdPosition", query = "SELECT p FROM PositionSteeltrat p WHERE p.idPosition = :idPosition"),
     @NamedQuery(name = "PositionSteeltrat.findByNamePosition", query = "SELECT p FROM PositionSteeltrat p WHERE p.namePosition = :namePosition")})
 public class PositionSteeltrat implements Serializable {

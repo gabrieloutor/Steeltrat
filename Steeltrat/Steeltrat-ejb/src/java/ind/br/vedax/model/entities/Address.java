@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "ADDRESS")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Address.findAll", query = "SELECT a FROM Address a"),
+    @NamedQuery(name = "Address.findAll", query = "SELECT a FROM Address a ORDER BY a.zipcode, a.numberAddress"),
     @NamedQuery(name = "Address.findByIdAddress", query = "SELECT a FROM Address a WHERE a.idAddress = :idAddress"),
     @NamedQuery(name = "Address.findByZipcode", query = "SELECT a FROM Address a WHERE a.zipcode = :zipcode"),
     @NamedQuery(name = "Address.findByZipcodeAndNumberAddress", query = "SELECT a FROM Address a WHERE a.zipcode = :zipcode AND a.numberAddress = :numberAddress"),
@@ -69,10 +69,14 @@ public class Address implements Serializable {
         return zipcode;
     }
 
+    public String getFormattedZipcode(){
+        return zipcode.substring(0,5)+"-"+zipcode.substring(5,8);
+    }
+    
     public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
     }
-
+    
     public int getNumberAddress() {
         return numberAddress;
     }

@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "DEPARTAMENT")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Departament.findAll", query = "SELECT d FROM Departament d"),
+    @NamedQuery(name = "Departament.findAll", query = "SELECT d FROM Departament d ORDER BY d.nameDepartament"),
     @NamedQuery(name = "Departament.findByIdDepartament", query = "SELECT d FROM Departament d WHERE d.idDepartament = :idDepartament"),
     @NamedQuery(name = "Departament.findByNameDepartament", query = "SELECT d FROM Departament d WHERE d.nameDepartament = :nameDepartament")})
 public class Departament implements Serializable {

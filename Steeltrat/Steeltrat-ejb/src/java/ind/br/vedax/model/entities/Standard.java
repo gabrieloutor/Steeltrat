@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "STANDARD")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Standard.findAll", query = "SELECT s FROM Standard s"),
+    @NamedQuery(name = "Standard.findAll", query = "SELECT s FROM Standard s ORDER BY s.nameStandard"),
     @NamedQuery(name = "Standard.findByIdStandard", query = "SELECT s FROM Standard s WHERE s.idStandard = :idStandard"),
     @NamedQuery(name = "Standard.findByNameStandard", query = "SELECT s FROM Standard s WHERE s.nameStandard = :nameStandard"),
     @NamedQuery(name = "Standard.findByMarkStandard", query = "SELECT s FROM Standard s WHERE s.markStandard = :markStandard")})
