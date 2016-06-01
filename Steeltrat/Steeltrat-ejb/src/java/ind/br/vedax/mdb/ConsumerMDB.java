@@ -35,8 +35,7 @@ public class ConsumerMDB implements MessageListener {
             File file = new File("/Users/GabrielOutor/Documents/log.txt");
             if(!file.exists()) file.createNewFile();
             
-            SimpleDateFormat formatter = 
-                    new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             
             String txt = new String(carregar(file));
             txt += "\n"+formatter.format(new Date())+" - "+txtmsg.getText();
