@@ -27,6 +27,7 @@ public class UserCommand implements Command {
     EmployeeDAO employeeDAO = lookupEmployeeDAOBean();
     UserSteeltratDAO userSteeltratDAO = lookupUserSteeltratDAOBean();
 
+    private final String forLog = "Usuário";
     private EntityManagerFactory emf;
     private EntityManager em;
     private HttpServletRequest request;
@@ -72,7 +73,7 @@ public class UserCommand implements Command {
                     String password = request.getParameter("password");
                     if (authorize(username, password)) {
                         /* LOG DO SISTEMA */
-                        producerBean.sendMessage(employee.getNameEmployee() + LogEnum.LOGIN_MESSAGE.toString());
+                        producerBean.sendMessage(employee.getNameEmployee() + LogEnum.LOGIN_MESSAGE);
                         request.getSession().setAttribute("employee", employee);
                         username = "";
                         password = "";
@@ -122,7 +123,7 @@ public class UserCommand implements Command {
 
                     if ((userSteeltratDAO.readByName(user.getUsername())) != null) {
                         /* "SETA" ATRIBUTOS */
-                        request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.USER_ERROR_MESSAGE.toString());
+                        request.getSession().setAttribute("returnMsgError", forLog + ReturnMsgEnum.GENERIC_ERROR_MESSAGE);
 
                         /* REDIRECIONA PARA PÁGINA DESEJADA */
                         returnPage = "WEB-INF/jsp/user/insert.jsp";
@@ -198,7 +199,7 @@ public class UserCommand implements Command {
 
                     if ((userSteeltratDAO.readByName(request.getParameter("username"))) != null) {
                         /* "SETA" ATRIBUTOS */
-                        request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.USER_ERROR_MESSAGE.toString());
+                        request.getSession().setAttribute("returnMsgError", forLog + ReturnMsgEnum.GENERIC_ERROR_MESSAGE);
 
                         /* REDIRECIONA PARA PÁGINA DESEJADA */
                         returnPage = "WEB-INF/jsp/user/insert.jsp";
@@ -209,7 +210,7 @@ public class UserCommand implements Command {
                     user.setPassword(request.getParameter("password"));
 
                     /* LOG DO SISTEMA */
-                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.UPDATE_MESSAGE.toString());
 
                     /* "SETA" ATRIBUTOS */
                     request.getSession().setAttribute("users", userSteeltratDAO.read());
@@ -239,23 +240,26 @@ public class UserCommand implements Command {
                     producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
 
                     /* "SETA" ATRIBUTOS */
-                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.GENERIC_DELETE_MESSAGE);
 
                     /* REDIRECIONA PARA PÁGINA DESEJADA */
-                    returnPage = "WEB-INF/jsp/home.jsp";
-                    break;
+                    returnPage = "WEB-INF/jsp/user/delete.jsp";
+                    return;
                 }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/user/delete.jsp";
                 break;
             case "delete.confirm":
-                /* CRIA OBJETO */
-                user = userSteeltratDAO.readById(Long.parseLong(request.getParameter("users")));
-
                 try {
+                    /* CRIA OBJETO */
+                    user = userSteeltratDAO.readById(Long.parseLong(request.getParameter("users")));
+
                     /* PERSITE O OBJETO NO BANCO */
                     userSteeltratDAO.delete(user);
+                    
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.DELETE_MESSAGE.toString());
 
                     /* "SETA" ATRIBUTOS */
                     request.getSession().setAttribute("users", userSteeltratDAO.read());
@@ -265,11 +269,11 @@ public class UserCommand implements Command {
                     producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
 
                     /* "SETA" ATRIBUTOS */
-                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.GENERIC_DELETE_MESSAGE.toString());
 
                     /* REDIRECIONA PARA PÁGINA DESEJADA */
-                    returnPage = "WEB-INF/jsp/home.jsp";
-                    break;
+                    returnPage = "WEB-INF/jsp/user/delete.jsp";
+                    return;
                 }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */

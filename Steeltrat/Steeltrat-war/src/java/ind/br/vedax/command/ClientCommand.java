@@ -10,6 +10,7 @@ import ind.br.vedax.jms.ProducerBean;
 import ind.br.vedax.model.dao.AddressDAO;
 import ind.br.vedax.model.dao.ClientDAO;
 import ind.br.vedax.model.entities.Client;
+import ind.br.vedax.model.entities.Employee;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
@@ -22,11 +23,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class ClientCommand implements Command {
+
     ProducerBean producerBean = lookupProducerBeanBean();
 
     AddressDAO addressDAO = lookupAddressDAOBean();
     ClientDAO clientDAO = lookupClientDAOBean();
-    
+
+    private final String forLog = "Nome de Cliente";
     private EntityManagerFactory emf;
     private EntityManager em;
     public HttpServletRequest request;
@@ -51,10 +54,10 @@ public class ClientCommand implements Command {
         } catch (Exception ex) {
             /* LOG DO SISTEMA */
             producerBean.sendMessage(LogEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* "SETA" ATRIBUTOS */
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* REDIRECIONA PARA PÁGINA DESEJADA */
             returnPage = "index.jsp";
             return;
@@ -72,78 +75,173 @@ public class ClientCommand implements Command {
                 returnPage = "WEB-INF/jsp/client/insert.jsp";
                 break;
             case "insert.confirm":
-                /* VARIÁVEIS DO FORM */
                 try {
+                    /* VARIÁVEIS DO FORM */
                     client.setNameClient(request.getParameter("name_client"));
                     client.setTelephone(Long.parseLong(request.getParameter("telephone_client")));
                     client.setIdAddress(addressDAO.readById(Long.parseLong(request.getParameter("addresses"))));
+                    
+                    if ((clientDAO.readByName(client.getNameClient())) != null) {
+                        /* "SETA" ATRIBUTOS */
+                        request.getSession().setAttribute("returnMsgError", forLog + ReturnMsgEnum.GENERIC_ERROR_MESSAGE);
+
+                        /* REDIRECIONA PARA PÁGINA DESEJADA */
+                        returnPage = "WEB-INF/jsp/client/insert.jsp";
+                        break;
+                    }
+                    
+                    /* PERSITE O OBJETO NO BANCO */
+                    clientDAO.create(client);
+
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CREATE_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("clients", clientDAO.read());
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
+
                 } catch (Exception ex) {
-                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.INPUT_ERROR_MESSAGE.toString());
-                    returnPage = "WEB-INF/jsp/client/insert.jsp";
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
                     break;
                 }
-                /* PERSITE O OBJETO NO BANCO */
-                try {
-                    clientDAO.create(client);
-                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
-                } catch (Exception ex) {
-                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.ERROR_MESSAGE.toString());
-                }
-
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("clients", clientDAO.read());
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/client/read.jsp";
                 break;
             case "read":
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("clients", clientDAO.read());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("clients", clientDAO.read());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/client/read.jsp";
                 break;
             case "update":
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("addresses", addressDAO.read());
-                request.getSession().setAttribute("clients", clientDAO.read());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("addresses", addressDAO.read());
+                    request.getSession().setAttribute("clients", clientDAO.read());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/client/update.jsp";
                 break;
             case "updateById":
-                /* CRIA OBJETO */
-                client = clientDAO.readById(Long.parseLong(request.getParameter("clients")));
+                try {
+                    /* CRIA OBJETO */
+                    client = clientDAO.readById(Long.parseLong(request.getParameter("clients")));
+                    
+                    if (!client.getNameClient().equals(request.getParameter("name_client")) && (clientDAO.readByName(request.getParameter("name_client"))) != null) {
+                        /* "SETA" ATRIBUTOS */
+                        request.getSession().setAttribute("returnMsgError", forLog + ReturnMsgEnum.GENERIC_ERROR_MESSAGE);
 
-                /* VARIÁVEIS DO FORM */
-                client.setNameClient(request.getParameter("name_client"));
-                client.setTelephone(Long.parseLong(request.getParameter("telephone_client")));
-                client.setIdAddress(addressDAO.readById(Long.parseLong(request.getParameter("addresses"))));
+                        /* REDIRECIONA PARA PÁGINA DESEJADA */
+                        returnPage = "WEB-INF/jsp/client/insert.jsp";
+                        break;
+                    }
+                    
+                    /* VARIÁVEIS DO FORM */
+                    client.setNameClient(request.getParameter("name_client"));
+                    client.setTelephone(Long.parseLong(request.getParameter("telephone_client")));
+                    client.setIdAddress(addressDAO.readById(Long.parseLong(request.getParameter("addresses"))));
 
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("clients", clientDAO.read());
-                request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.UPDATE_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("clients", clientDAO.read());
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/client/read.jsp";
                 break;
             case "delete":
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("clients", clientDAO.read());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("clients", clientDAO.read());
 
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/client/delete.jsp";
                 break;
             case "delete.confirm":
-                /* CRIA OBJETO */
-                client = clientDAO.readById(Long.parseLong(request.getParameter("clients")));
+                try {
+                    /* CRIA OBJETO */
+                    client = clientDAO.readById(Long.parseLong(request.getParameter("clients")));
 
-                /* PERSITE O OBJETO NO BANCO */
-                clientDAO.delete(client);
+                    /* PERSITE O OBJETO NO BANCO */
+                    clientDAO.delete(client);
+                    
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.DELETE_MESSAGE.toString());
 
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("clients", clientDAO.read());
-                request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("clients", clientDAO.read());
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.GENERIC_DELETE_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/client/delete.jsp";
+                    return;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/client/read.jsp";
@@ -151,18 +249,18 @@ public class ClientCommand implements Command {
             case "route":
                 /* VARIÁVEL DA TABELA */
                 String zipcode = request.getParameter("zipcode");
-                
+
                 /* CRIA CONTEXTO PARA API's */
                 String contentStart = ConnectionManager.readContent("https://maps.googleapis.com/maps/api/geocode/json?address=06413-900&components=country:BR&key=AIzaSyB7USt8JY_YSX1IL-g0W_Utax1PzXlxHzA");
                 Place start = JSONMapsParser.parseFeed(contentStart);
-                
+
                 String contentEnd = ConnectionManager.readContent("https://maps.googleapis.com/maps/api/geocode/json?address=" + zipcode + "&components=country:BR&key=AIzaSyB7USt8JY_YSX1IL-g0W_Utax1PzXlxHzA");
                 Place end = JSONMapsParser.parseFeed(contentEnd);
-                
+
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("start", start);
                 request.getSession().setAttribute("end", end);
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/client/read.jsp";
                 break;
@@ -181,10 +279,10 @@ public class ClientCommand implements Command {
         } catch (Exception ex) {
             /* LOG DO SISTEMA */
             producerBean.sendMessage(LogEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* "SETA" ATRIBUTOS */
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* REDIRECIONA PARA PÁGINA DESEJADA */
             returnPage = "index.jsp";
         }

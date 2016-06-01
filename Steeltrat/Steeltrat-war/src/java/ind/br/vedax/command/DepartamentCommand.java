@@ -5,6 +5,7 @@ import ind.br.vedax.enums.ReturnMsgEnum;
 import ind.br.vedax.jms.ProducerBean;
 import ind.br.vedax.model.entities.Departament;
 import ind.br.vedax.model.dao.DepartamentDAO;
+import ind.br.vedax.model.entities.Employee;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
@@ -17,10 +18,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class DepartamentCommand implements Command {
+
     ProducerBean producerBean = lookupProducerBeanBean();
 
     DepartamentDAO departamentDAO = lookupDepartamentDAOBean();
 
+    private final String forLog = "Departamento";
     private EntityManagerFactory emf;
     private EntityManager em;
     private HttpServletRequest request;
@@ -44,15 +47,15 @@ public class DepartamentCommand implements Command {
         } catch (Exception ex) {
             /* LOG DO SISTEMA */
             producerBean.sendMessage(LogEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* "SETA" ATRIBUTOS */
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* REDIRECIONA PARA PÁGINA DESEJADA */
             returnPage = "index.jsp";
             return;
         }
-        
+
         /* INICIO LÓGICA */
         String action = request.getParameter("action");
         Departament departament = new Departament();
@@ -62,64 +65,169 @@ public class DepartamentCommand implements Command {
                 returnPage = "WEB-INF/jsp/departament/insert.jsp";
                 break;
             case "insert.confirm":
-                /* VARIÁVEIS DO FORM */
-                departament.setNameDepartament(request.getParameter("name_departament"));
+                try {
+                    /* VARIÁVEIS DO FORM */
+                    departament.setNameDepartament(request.getParameter("name_departament"));
 
-                /* PERSITE O OBJETO NO BANCO */
-                departamentDAO.create(departament);
+                    if ((departamentDAO.readByName(departament.getNameDepartament())) != null) {
+                        /* "SETA" ATRIBUTOS */
+                        request.getSession().setAttribute("returnMsgError", forLog + ReturnMsgEnum.GENERIC_ERROR_MESSAGE);
 
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("departaments", departamentDAO.read());
-                request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
+                        /* REDIRECIONA PARA PÁGINA DESEJADA */
+                        returnPage = "WEB-INF/jsp/address/insert.jsp";
+                        break;
+                    }
+
+                    /* PERSITE O OBJETO NO BANCO */
+                    departamentDAO.create(departament);
+
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CREATE_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("departaments", departamentDAO.read());
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/departament/read.jsp";
                 break;
             case "read":
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("departaments", departamentDAO.read());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("departaments", departamentDAO.read());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/departament/read.jsp";
                 break;
             case "update":
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("departaments", departamentDAO.read());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("departaments", departamentDAO.read());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/departament/update.jsp";
                 break;
             case "updateById":
-                /* CRIA OBJETO */
-                departament = departamentDAO.readById(Long.parseLong(request.getParameter("departaments")));
+                try {
+                    /* CRIA OBJETO */
+                    departament = departamentDAO.readById(Long.parseLong(request.getParameter("departaments")));
 
-                /* VARIÁVEIS DO FORM */
-                departament.setNameDepartament(request.getParameter("name_departament"));
+                    if ((departamentDAO.readByName(request.getParameter("name_departament"))) != null) {
+                        /* "SETA" ATRIBUTOS */
+                        request.getSession().setAttribute("returnMsgError", forLog + ReturnMsgEnum.GENERIC_ERROR_MESSAGE);
 
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("departaments", departamentDAO.read());
-                request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
+                        /* REDIRECIONA PARA PÁGINA DESEJADA */
+                        returnPage = "WEB-INF/jsp/address/update.jsp";
+                        break;
+                    }
+
+                    /* VARIÁVEIS DO FORM */
+                    departament.setNameDepartament(request.getParameter("name_departament"));
+
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.UPDATE_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("departaments", departamentDAO.read());
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/departament/read.jsp";
                 break;
             case "delete":
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("departaments", departamentDAO.read());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("departaments", departamentDAO.read());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/departament/delete.jsp";
                 break;
             case "delete.confirm":
-                /* CRIA OBJETO */
-                departament = departamentDAO.readById(Long.parseLong(request.getParameter("departaments")));
+                try {
+                    /* CRIA OBJETO */
+                    departament = departamentDAO.readById(Long.parseLong(request.getParameter("departaments")));
 
-                /* PERSITE O OBJETO NO BANCO */
-                departamentDAO.delete(departament);
+                    /* PERSITE O OBJETO NO BANCO */
+                    departamentDAO.delete(departament);
 
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("departaments", departamentDAO.read());
-                request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.DELETE_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("departaments", departamentDAO.read());
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.GENERIC_DELETE_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/departament/delete.jsp";
+                    return;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/departament/read.jsp";
@@ -139,10 +247,10 @@ public class DepartamentCommand implements Command {
         } catch (Exception ex) {
             /* LOG DO SISTEMA */
             producerBean.sendMessage(LogEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* "SETA" ATRIBUTOS */
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* REDIRECIONA PARA PÁGINA DESEJADA */
             returnPage = "index.jsp";
         }

@@ -28,6 +28,7 @@ public class EmployeeCommand implements Command {
     DepartamentDAO departamentDAO = lookupDepartamentDAOBean();
     EmployeeDAO employeeDAO = lookupEmployeeDAOBean();
 
+    private final String forLog = "C.P.F.";
     private EntityManagerFactory emf;
     private EntityManager em;
     private HttpServletRequest request;
@@ -96,10 +97,10 @@ public class EmployeeCommand implements Command {
                     employee.setIdPosition(positionSteeltratDAO.readById(Long.parseLong(request.getParameter("positions"))));
                     employee.setIdDepartament(departamentDAO.readById(Long.parseLong(request.getParameter("departaments"))));
                     employee.setCpf(request.getParameter("cpf_employee"));
-//                    employee.getCpf().substring(index)
+
                     if ((employeeDAO.readByCpf(employee.getCpf())) != null) {
                         /* "SETA" ATRIBUTOS */
-                        request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CPF_ERROR_MESSAGE.toString());
+                        request.getSession().setAttribute("returnMsgError", forLog + ReturnMsgEnum.GENERIC_ERROR_MESSAGE);
 
                         /* REDIRECIONA PARA PÁGINA DESEJADA */
                         returnPage = "WEB-INF/jsp/employee/insert.jsp";
@@ -179,22 +180,22 @@ public class EmployeeCommand implements Command {
                     employee = employeeDAO.readById(Long.parseLong(request.getParameter("employees")));
 
                     /* PERSITE O OBJETO NO BANCO */
-                    if ((employeeDAO.readByCpf(request.getParameter("cpf_employee"))) != null) {
+                    if (!employee.getCpf().equals(request.getParameter("cpf_employee")) && (employeeDAO.readByCpf(request.getParameter("cpf_employee"))) != null) {
                         /* "SETA" ATRIBUTOS */
-                        request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CPF_ERROR_MESSAGE.toString());
+                        request.getSession().setAttribute("returnMsgError", forLog + ReturnMsgEnum.GENERIC_ERROR_MESSAGE);
 
                         /* REDIRECIONA PARA PÁGINA DESEJADA */
-                        returnPage = "WEB-INF/jsp/employee/insert.jsp";
+                        returnPage = "WEB-INF/jsp/employee/update.jsp";
                         break;
                     }
-
+                    
                     /* VARIÁVEIS DO FORM */
                     employee.setNameEmployee(request.getParameter("name_employee"));
                     employee.setIdUser(userSteeltratDAO.readById(Long.parseLong(request.getParameter("users"))));
                     employee.setIdPosition(positionSteeltratDAO.readById(Long.parseLong(request.getParameter("positions"))));
                     employee.setIdDepartament(departamentDAO.readById(Long.parseLong(request.getParameter("departaments"))));
                     employee.setCpf(request.getParameter("cpf_employee"));
-                    
+
                     /* LOG DO SISTEMA */
                     producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
 
@@ -241,6 +242,9 @@ public class EmployeeCommand implements Command {
 
                     /* PERSITE O OBJETO NO BANCO */
                     employeeDAO.delete(employee);
+                    
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.DELETE_MESSAGE.toString());
 
                     /* "SETA" ATRIBUTOS */
                     request.getSession().setAttribute("employees", employeeDAO.read());
@@ -250,12 +254,13 @@ public class EmployeeCommand implements Command {
                     producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
 
                     /* "SETA" ATRIBUTOS */
-                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.EMPLOYEE_DELETE_ERROR_MESSAGE.toString());
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.GENERIC_DELETE_MESSAGE.toString());
 
                     /* REDIRECIONA PARA PÁGINA DESEJADA */
-                    returnPage = "WEB-INF/jsp/home.jsp";
-                    break;
+                    returnPage = "WEB-INF/jsp/employee/delete.jsp";
+                    return;
                 }
+                
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/employee/read.jsp";
                 break;

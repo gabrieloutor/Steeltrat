@@ -23,6 +23,7 @@ public class AddressCommand implements Command {
 
     AddressDAO addressDAO = lookupAddressDAOBean();
 
+    private final String forLog = "Endereço";
     private EntityManagerFactory emf;
     private EntityManager em;
     private HttpServletRequest request;
@@ -68,10 +69,10 @@ public class AddressCommand implements Command {
                     /* VARIÁVEIS DO FORM */
                     address.setZipcode(request.getParameter("zipcode"));
                     address.setNumberAddress(Integer.parseInt(request.getParameter("number_address")));
-
+                    
                     if ((addressDAO.readByAddress(address.getZipcode(), address.getNumberAddress())) != null) {
                         /* "SETA" ATRIBUTOS */
-                        request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.ADDRESS_ERROR_MESSAGE.toString());
+                        request.getSession().setAttribute("returnMsgError", forLog + ReturnMsgEnum.GENERIC_ERROR_MESSAGE);
 
                         /* REDIRECIONA PARA PÁGINA DESEJADA */
                         returnPage = "WEB-INF/jsp/address/insert.jsp";
@@ -90,7 +91,7 @@ public class AddressCommand implements Command {
 
                 } catch (Exception ex) {
                     /* LOG DO SISTEMA */
-                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CREATE_MESSAGE.toString());
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
 
                     /* "SETA" ATRIBUTOS */
                     request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
@@ -147,18 +148,22 @@ public class AddressCommand implements Command {
                 try {
                     /* CRIA OBJETO */
                     address = addressDAO.readById(Long.parseLong(request.getParameter("addresses")));
-                    
-                    if ((addressDAO.readByAddress(address.getZipcode(), address.getNumberAddress())) != null) {
+
+                    if ((addressDAO.readByAddress(request.getParameter("zipcode"), Integer.parseInt(request.getParameter("number_address")))) != null) {
                         /* "SETA" ATRIBUTOS */
-                        request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.ADDRESS_ERROR_MESSAGE.toString());
+                        request.getSession().setAttribute("returnMsgError", forLog + ReturnMsgEnum.GENERIC_ERROR_MESSAGE);
 
                         /* REDIRECIONA PARA PÁGINA DESEJADA */
-                        returnPage = "WEB-INF/jsp/address/insert.jsp";
+                        returnPage = "WEB-INF/jsp/address/update.jsp";
                         break;
                     }
+                    
                     /* VARIÁVEIS DO FORM */
                     address.setZipcode(request.getParameter("zipcode"));
                     address.setNumberAddress(Integer.parseInt(request.getParameter("number_address")));
+                    
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.UPDATE_MESSAGE.toString());
 
                     /* "SETA" ATRIBUTOS */
                     request.getSession().setAttribute("addresses", addressDAO.read());
@@ -179,22 +184,51 @@ public class AddressCommand implements Command {
                 returnPage = "WEB-INF/jsp/address/read.jsp";
                 break;
             case "delete":
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("addresses", addressDAO.read());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("addresses", addressDAO.read());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/address/delete.jsp";
                 break;
             case "delete.confirm":
-                /* CRIA OBJETO */
-                address = addressDAO.readById(Long.parseLong(request.getParameter("addresses")));
+                try {
+                    /* CRIA OBJETO */
+                    address = addressDAO.readById(Long.parseLong(request.getParameter("addresses")));
 
-                /* PERSITE O OBJETO NO BANCO */
-                addressDAO.delete(address);
+                    /* PERSITE O OBJETO NO BANCO */
+                    addressDAO.delete(address);
 
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("addresses", addressDAO.read());
-                request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.DELETE_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("addresses", addressDAO.read());
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.GENERIC_DELETE_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/address/delete.jsp";
+                    return;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/address/read.jsp";
