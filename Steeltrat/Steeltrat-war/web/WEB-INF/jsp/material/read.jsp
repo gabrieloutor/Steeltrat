@@ -6,23 +6,23 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Steeltrat | Material - Visualizar</title>
         <link rel="icon" href="img/favicon.ico" />
-        <link href='css/home.css' rel='stylesheet'>
+        <link href="css/home.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <%@include file="../section.jspf" %>
         <%@include file="../menu.jspf" %>
-        <h3>Materiais&nbsp;&#45;&nbsp;Operações</h3>
-        <table style="width:100%">
+        <h3>Materiais&nbsp;&#45;&nbsp;Tabela</h3>
+        <table class="rwd-table">
             <tr>
-                <td>ID</td>
-                <td>NOME</td> 
-                <td>OBSERVAÇÃO</td>
+                <th>ID</th>
+                <th>NOME</th> 
+                <th>OBSERVAÇÃO</th>
             </tr>
             <c:forEach items="${materials}" var="material" varStatus="i">
                 <tr>
-                    <td>${material.idMaterial}</td>
-                    <td>${material.nameMaterial}</td>
-                    <td>${material.markMaterial}</td>
+                    <td data-th="ID">${material.idMaterial}</td>
+                    <td data-th="NOME">${material.nameMaterial}</td>
+                    <td data-th="OBSERVAÇÃO">${material.markMaterial}</td>
                 </tr>
             </c:forEach>
         </table>

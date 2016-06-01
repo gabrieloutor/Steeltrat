@@ -6,23 +6,23 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Steeltrat | Endereço - Visualizar</title>
         <link rel="icon" href="img/favicon.ico" />
-        <link href='css/home.css' rel='stylesheet'>
+        <link href="css/home.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <%@include file="../section.jspf" %>
         <%@include file="../menu.jspf" %>
-        <h3>Endereços&nbsp;&#45;&nbsp;Operações</h3>
-        <table style="width:100%">
+        <h3>Endereços&nbsp;&#45;&nbsp;Tabela</h3>
+        <table class="rwd-table">
             <tr>
-                <td>ID</td>
-                <td>ZIPCODE</td> 
-                <td>NÚMERO</td>
+                <th>ID</th>
+                <th>ZIPCODE</th> 
+                <th>NÚMERO</th>
             </tr>
             <c:forEach items="${addresses}" var="address" varStatus="i">
                 <tr>
-                    <td>${address.idAddress}</td>
-                    <td>${address.getFormattedZipcode()}</td>
-                    <td>${address.numberAddress}</td>
+                    <td data-th="ID">${address.idAddress}</td>
+                    <td data-th="ZIPCODE">${address.getFormattedZipcode()}</td>
+                    <td data-th="NÚMERO">${address.numberAddress}</td>
                 </tr>
             </c:forEach>
         </table>

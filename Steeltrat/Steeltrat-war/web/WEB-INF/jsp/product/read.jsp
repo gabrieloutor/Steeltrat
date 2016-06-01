@@ -6,23 +6,23 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Steeltrat | Produto - Visualizar</title>
         <link rel="icon" href="img/favicon.ico" />
-        <link href='css/home.css' rel='stylesheet'>
+        <link href="css/home.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <%@include file="../section.jspf" %>
         <%@include file="../menu.jspf" %>
-        <h3>Produtos&nbsp;&#45;&nbsp;Operações</h3>
-        <table style="width:100%">
+        <h3>Produtos&nbsp;&#45;&nbsp;Tabela</h3>
+        <table class="rwd-table">
             <tr>
-                <td>ID</td>
-                <td>NOME</td> 
-                <td>PREÇO</td>
+                <th>ID</th>
+                <th>NOME</th> 
+                <th>PREÇO</th>
             </tr>
             <c:forEach items="${products}" var="product" varStatus="i">
                 <tr>
-                    <td>${product.idProduct}</td>
-                    <td>${product.descriptionProduct}</td>
-                    <td>R$&nbsp;&nbsp;&nbsp;${product.price}</td>
+                    <td data-th="ID">${product.idProduct}</td>
+                    <td data-th="NOME">${product.descriptionProduct}</td>
+                    <td data-th="PREÇO">R$&nbsp;&nbsp;&nbsp;${product.price}</td>
                 </tr>
             </c:forEach>
         </table>

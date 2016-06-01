@@ -6,23 +6,23 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Steeltrat | Recebimento - Visualizar</title>
         <link rel="icon" href="img/favicon.ico" />
-        <link href='css/home.css' rel='stylesheet'>
+        <link href="css/home.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <%@include file="../section.jspf" %>
         <%@include file="../menu.jspf" %>
-        <h3>Recebimento&nbsp;&#45;&nbsp;Operações</h3>
-        <table style="width:100%">
+        <h3>Recebimento&nbsp;&#45;&nbsp;Tabela</h3>
+        <table class="rwd-table">
             <tr>
-                <td>NR RECEBIMENTO</td>
-                <td>CLIENTE</td>
-                <td>ITENS</td>
+                <th>NR RECEBIMENTO</th>
+                <th>CLIENTE</th>
+                <th>ITENS</th>
             </tr>
             <c:forEach items="${receipts}" var="receipt" varStatus="i">
                 <tr>
-                    <td>${receipt.idReceipt}</td>
-                    <td>${receipt.idClient.nameClient}</td>
-                    <td>
+                    <td data-th="NR RECEBIMENTO">${receipt.idReceipt}</td>
+                    <td data-th="CLIENTE">${receipt.idClient.nameClient}</td>
+                    <td data-th="ITENS">
                         <c:forEach begin="1" end="${receipt.getItemsReceiptList().size()}" var="items">
                             ${items}
                         </c:forEach>

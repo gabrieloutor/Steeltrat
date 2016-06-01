@@ -6,7 +6,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Steeltrat | Cargo - Deletar</title>
         <link rel="icon" href="img/favicon.ico" />
-        <link href='css/home.css' rel='stylesheet'>
+        <link href="css/home.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <%@include file="../section.jspf" %>

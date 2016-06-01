@@ -6,23 +6,23 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Steeltrat | Usuário - Visualizar</title>
         <link rel="icon" href="img/favicon.ico" />
-        <link href='css/home.css' rel='stylesheet'>
+        <link href="css/home.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <%@include file="../section.jspf" %>
         <%@include file="../menu.jspf" %>
-        <h3>Usuários&nbsp;&#45;&nbsp;Operações</h3>
-        <table style="width:100%">
+        <h3>Usuários&nbsp;&#45;&nbsp;Tabela</h3>
+        <table class="rwd-table">
             <tr>
-                <td>ID</td>
-                <td>USERNAME</td> 
-                <td>SENHA</td>
+                <th>ID</th>
+                <th>USERNAME</th> 
+                <th>SENHA</th>
             </tr>
             <c:forEach items="${users}" var="user">
                 <tr>
-                    <td>${user.idUser}</td>
-                    <td>${user.username}</td>
-                    <td>${user.password}</td>
+                    <td data-th="ID">${user.idUser}</td>
+                    <td data-th="USERNAME">${user.username}</td>
+                    <td data-th="SENHA">${user.password}</td>
                 </tr>
             </c:forEach>
         </table>

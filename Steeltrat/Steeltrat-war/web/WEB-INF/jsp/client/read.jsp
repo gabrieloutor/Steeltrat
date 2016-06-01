@@ -6,27 +6,27 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Steeltrat | Cliente - Visualizar</title>
         <link rel="icon" href="img/favicon.ico" />
-        <link href='css/home.css' rel='stylesheet'>
+        <link href="css/home.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <%@include file="../section.jspf" %>
         <%@include file="../menu.jspf" %>
-        <h3>Clientes&nbsp;&#45;&nbsp;Operações</h3>
-        <table style="width:100%">
+        <h3>Clientes&nbsp;&#45;&nbsp;Tabela</h3>
+        <table class="rwd-table">
             <tr>
-                <td>ID</td>
-                <td>NOME</td> 
-                <td>TELEFONE</td>
-                <td>C.E.P. / NR</td>
-                <td>ROTA</td>
+                <th>ID</th>
+                <th>NOME</th> 
+                <th>TELEFONE</th>
+                <th>C.E.P. / NR</th>
+                <th>ROTA</th>
             </tr>
             <c:forEach items="${clients}" var="client" varStatus="i">
                 <tr>
-                    <td>${client.idClient}</td>
-                    <td>${client.nameClient}</td>
-                    <td>+${client.telephone.toString().substring(0,2)} (${client.telephone.toString().substring(2,4)}) ${client.telephone.toString().substring(4,8)}-${client.telephone.toString().substring(8)}</td>
-                    <td>${client.idAddress.getFormattedZipcode()} / ${client.idAddress.numberAddress}</td>
-                    <td><a href="home?command=Client&action=route&zipcode=${client.idAddress.zipcode}" >Traçar Rota</a></td>
+                    <td data-th="ID">${client.idClient}</td>
+                    <td data-th="NOME">${client.nameClient}</td>
+                    <td data-th="TELEFONE">+${client.telephone.toString().substring(0,2)} (${client.telephone.toString().substring(2,4)}) ${client.telephone.toString().substring(4,8)}-${client.telephone.toString().substring(8)}</td>
+                    <td data-th="C.E.P. / NR">${client.idAddress.getFormattedZipcode()} / ${client.idAddress.numberAddress}</td>
+                    <td data-th="ROTA"><a href="home?command=Client&action=route&zipcode=${client.idAddress.zipcode}" >Traçar Rota</a></td>
                 </tr>
             </c:forEach>
         </table>

@@ -6,21 +6,21 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Steeltrat | Cargo - Visualizar</title>
         <link rel="icon" href="img/favicon.ico" />
-        <link href='css/home.css' rel='stylesheet'>
+        <link href="css/home.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <%@include file="../section.jspf" %>
         <%@include file="../menu.jspf" %>
-        <h3>Cargos&nbsp;&#45;&nbsp;Operações</h3>
-        <table style="width:100%">
+        <h3>Cargos&nbsp;&#45;&nbsp;Tabela</h3>
+        <table class="rwd-table">
             <tr>
-                <td>ID</td>
-                <td>NOME</td> 
+                <th>ID</th>
+                <th>NOME</th> 
             </tr>
             <c:forEach items="${positions}" var="position" varStatus="i">
                 <tr>
-                    <td>${position.idPosition}</td>
-                    <td>${position.namePosition}</td>
+                    <td data-th="ID">${position.idPosition}</td>
+                    <td data-th="NOME">${position.namePosition}</td>
                 </tr>
             </c:forEach>
         </table>

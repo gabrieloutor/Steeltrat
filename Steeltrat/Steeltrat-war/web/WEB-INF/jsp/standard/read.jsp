@@ -6,23 +6,23 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Steeltrat | Norma - Visualizar</title>
     <link rel="icon" href="img/favicon.ico" />
-        <link href='css/home.css' rel='stylesheet'>
+        <link href="css/home.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <%@include file="../section.jspf" %>
         <%@include file="../menu.jspf" %>
-        <h3>Normas&nbsp;&#45;&nbsp;Operações</h3>
-        <table style="width:100%">
+        <h3>Normas&nbsp;&#45;&nbsp;Tabela</h3>
+        <table class="rwd-table">
             <tr>
-                <td>ID</td>
-                <td>NOME</td> 
-                <td>OBSERVAÇÃO</td>
+                <th>ID</th>
+                <th>NOME</th> 
+                <th>OBSERVAÇÃO</th>
             </tr>
             <c:forEach items="${standards}" var="standard" varStatus="i">
                 <tr>
-                    <td>${standard.idStandard}</td>
-                    <td>${standard.nameStandard}</td>
-                    <td>${standard.markStandard}</td>
+                    <td data-th="ID">${standard.idStandard}</td>
+                    <td data-th="NOME">${standard.nameStandard}</td>
+                    <td data-th="OBSERVAÇÃO">${standard.markStandard}</td>
                 </tr>
             </c:forEach>
         </table>

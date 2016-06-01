@@ -6,21 +6,21 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Steeltrat | Departamento - Visualizar</title>
         <link rel="icon" href="img/favicon.ico" />
-        <link href='css/home.css' rel='stylesheet'>
+        <link href="css/home.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <%@include file="../section.jspf" %>
         <%@include file="../menu.jspf" %>
-        <h3>Departamentos&nbsp;&#45;&nbsp;Operações</h3>
-        <table style="width:100%">
+        <h3>Departamentos&nbsp;&#45;&nbsp;Tabela</h3>
+        <table class="rwd-table">
             <tr>
-                <td>ID</td>
-                <td>NOME</td> 
+                <th>ID</th>
+                <th>NOME</th> 
             </tr>
             <c:forEach items="${departaments}" var="departament" varStatus="i">
                 <tr>
-                    <td>${departament.idDepartament}</td>
-                    <td>${departament.nameDepartament}</td>
+                    <td data-th="ID">${departament.idDepartament}</td>
+                    <td data-th="NOME">${departament.nameDepartament}</td>
                 </tr>
             </c:forEach>
         </table>

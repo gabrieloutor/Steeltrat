@@ -7,7 +7,7 @@
         <title>Steeltrat | Funcionário - Inserir</title>
         <link rel="icon" href="img/favicon.ico" />
         <script src="js/validation.js" type="text/javascript"></script>
-        <link href='css/home.css' rel='stylesheet'>
+        <link href="css/home.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <%@include file="../section.jspf" %>
