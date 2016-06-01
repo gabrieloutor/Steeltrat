@@ -63,7 +63,7 @@ public enum LogEnum {
     CONNECT_ERROR_MESSAGE{
         @Override
         public String toString(){
-            return "Falha na conexão ao banco de dados!";
+            return " - Falha na conexão ao banco de dados ou erro nos dados!";
         }
     }
 }
