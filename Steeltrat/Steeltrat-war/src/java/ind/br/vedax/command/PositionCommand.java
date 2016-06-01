@@ -4,6 +4,7 @@ import ind.br.vedax.enums.LogEnum;
 import ind.br.vedax.enums.ReturnMsgEnum;
 import ind.br.vedax.jms.ProducerBean;
 import ind.br.vedax.model.dao.PositionSteeltratDAO;
+import ind.br.vedax.model.entities.Employee;
 import ind.br.vedax.model.entities.PositionSteeltrat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,10 +18,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class PositionCommand implements Command {
+
     ProducerBean producerBean = lookupProducerBeanBean();
 
     PositionSteeltratDAO positionSteeltratDAO = lookupPositionSteeltratDAOBean();
-    
+
     private final String forLog = "Cargo";
     private EntityManagerFactory emf;
     private EntityManager em;
@@ -63,64 +65,142 @@ public class PositionCommand implements Command {
                 returnPage = "WEB-INF/jsp/position/insert.jsp";
                 break;
             case "insert.confirm":
-                /* VARIÁVEIS DO FORM */
-                position.setNamePosition(request.getParameter("name_position"));
+                try {
+                    /* VARIÁVEIS DO FORM */
+                    position.setNamePosition(request.getParameter("name_position"));
 
-                /* PERSITE O OBJETO NO BANCO */
-                positionSteeltratDAO.create(position);
+                    /* PERSITE O OBJETO NO BANCO */
+                    positionSteeltratDAO.create(position);
 
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("positions", positionSteeltratDAO.read());
-                request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("positions", positionSteeltratDAO.read());
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/position/read.jsp";
                 break;
             case "read":
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("positions", positionSteeltratDAO.read());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("positions", positionSteeltratDAO.read());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/position/read.jsp";
                 break;
             case "update":
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("positions", positionSteeltratDAO.read());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("positions", positionSteeltratDAO.read());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/position/update.jsp";
                 break;
             case "updateById":
-                /* CRIA OBJETO */
-                position = positionSteeltratDAO.readById(Long.parseLong(request.getParameter("positions")));
+                try {
+                    /* CRIA OBJETO */
+                    position = positionSteeltratDAO.readById(Long.parseLong(request.getParameter("positions")));
 
-                /* PERSITE O OBJETO NO BANCO */
-                position.setNamePosition(request.getParameter("name_position"));
+                    /* PERSITE O OBJETO NO BANCO */
+                    position.setNamePosition(request.getParameter("name_position"));
 
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("positions", positionSteeltratDAO.read());
-                request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("positions", positionSteeltratDAO.read());
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/position/read.jsp";
                 break;
             case "delete":
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("positions", positionSteeltratDAO.read());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("positions", positionSteeltratDAO.read());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/position/delete.jsp";
                 break;
             case "delete.confirm":
-                /* CRIA OBJETO */
-                position = positionSteeltratDAO.readById(Long.parseLong(request.getParameter("positions")));
+                try {
+                    /* CRIA OBJETO */
+                    position = positionSteeltratDAO.readById(Long.parseLong(request.getParameter("positions")));
 
-                /* PERSITE O OBJETO NO BANCO */
-                positionSteeltratDAO.delete(position);
+                    /* PERSITE O OBJETO NO BANCO */
+                    positionSteeltratDAO.delete(position);
 
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("positions", positionSteeltratDAO.read());
-                request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("positions", positionSteeltratDAO.read());
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.GENERIC_DELETE_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/position/read.jsp";
@@ -140,10 +220,10 @@ public class PositionCommand implements Command {
         } catch (Exception ex) {
             /* LOG DO SISTEMA */
             producerBean.sendMessage(LogEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* "SETA" ATRIBUTOS */
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* REDIRECIONA PARA PÁGINA DESEJADA */
             returnPage = "index.jsp";
         }

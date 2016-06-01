@@ -4,6 +4,7 @@ import ind.br.vedax.enums.LogEnum;
 import ind.br.vedax.enums.ReturnMsgEnum;
 import ind.br.vedax.jms.ProducerBean;
 import ind.br.vedax.model.dao.StandardDAO;
+import ind.br.vedax.model.entities.Employee;
 import ind.br.vedax.model.entities.Standard;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -63,6 +64,7 @@ public class StandardCommand implements Command {
                 returnPage = "WEB-INF/jsp/standard/insert.jsp";
                 break;
             case "insert.confirm":
+                try{
                 /* VARIÁVEIS DO FORM */
                 standard.setNameStandard(request.getParameter("name_standard"));
                 standard.setMarkStandard(request.getParameter("mark_standard"));
@@ -74,24 +76,63 @@ public class StandardCommand implements Command {
                 request.getSession().setAttribute("standards", standardDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
 
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
+                
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/standard/read.jsp";
                 break;
             case "read":
+                try{
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("standards", standardDAO.read());
 
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
+                
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/standard/read.jsp";
                 break;
             case "update":
+                try{
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("standards", standardDAO.read());
 
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
+                
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/standard/update.jsp";
                 break;
             case "updateById":
+                try{
                 /* CRIA OBJETO */
                 standard = standardDAO.readById(Long.parseLong(request.getParameter("standards")));
 
@@ -103,17 +144,43 @@ public class StandardCommand implements Command {
                 request.getSession().setAttribute("standards", standardDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
 
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
+                
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/standard/read.jsp";
                 break;
             case "delete":
+                try{
                 /* "SETA" ATRIBUTOS */
                 request.getSession().setAttribute("standards", standardDAO.read());
 
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
+                
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/standard/delete.jsp";
                 break;
             case "delete.confirm":
+                try{
                 /* CRIA OBJETO */
                 standard = standardDAO.readById(Long.parseLong(request.getParameter("standards")));
 
@@ -124,6 +191,18 @@ public class StandardCommand implements Command {
                 request.getSession().setAttribute("standards", standardDAO.read());
                 request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
 
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.GENERIC_DELETE_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
+                
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/standard/read.jsp";
                 break;

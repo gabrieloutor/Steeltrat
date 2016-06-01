@@ -4,6 +4,7 @@ import ind.br.vedax.enums.LogEnum;
 import ind.br.vedax.enums.ReturnMsgEnum;
 import ind.br.vedax.jms.ProducerBean;
 import ind.br.vedax.model.dao.ProductDAO;
+import ind.br.vedax.model.entities.Employee;
 import ind.br.vedax.model.entities.Product;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class ProductCommand implements Command {
+
     ProducerBean producerBean = lookupProducerBeanBean();
 
     ProductDAO productDAO = lookupProductDAOBean();
@@ -45,15 +47,15 @@ public class ProductCommand implements Command {
         } catch (Exception ex) {
             /* LOG DO SISTEMA */
             producerBean.sendMessage(LogEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* "SETA" ATRIBUTOS */
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* REDIRECIONA PARA PÁGINA DESEJADA */
             returnPage = "index.jsp";
             return;
         }
-        
+
         /* INICIO LÓGICA */
         String action = request.getParameter("action");
         Product product = new Product();
@@ -63,66 +65,144 @@ public class ProductCommand implements Command {
                 returnPage = "WEB-INF/jsp/product/insert.jsp";
                 break;
             case "insert.confirm":
-                /* VARIÁVEIS DO FORM */
-                product.setDescriptionProduct(request.getParameter("description_product"));
-                product.setPrice(Double.parseDouble(request.getParameter("price")));
+                try {
+                    /* VARIÁVEIS DO FORM */
+                    product.setDescriptionProduct(request.getParameter("description_product"));
+                    product.setPrice(Double.parseDouble(request.getParameter("price")));
 
-                /* PERSITE O OBJETO NO BANCO */
-                productDAO.create(product);
+                    /* PERSITE O OBJETO NO BANCO */
+                    productDAO.create(product);
 
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("products", productDAO.read());
-                request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("products", productDAO.read());
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/product/read.jsp";
                 break;
             case "read":
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("products", productDAO.read());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("products", productDAO.read());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/product/read.jsp";
                 break;
             case "update":
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("products", productDAO.read());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("products", productDAO.read());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/product/update.jsp";
                 break;
             case "updateById":
-                /* CRIA OBJETO */
-                product = productDAO.readById(Long.parseLong(request.getParameter("products")));
+                try {
+                    /* CRIA OBJETO */
+                    product = productDAO.readById(Long.parseLong(request.getParameter("products")));
 
-                /* VARIÁVEIS DO FORM */
-                product.setDescriptionProduct(request.getParameter("description_product"));
-                product.setPrice(Double.parseDouble(request.getParameter("price")));
+                    /* VARIÁVEIS DO FORM */
+                    product.setDescriptionProduct(request.getParameter("description_product"));
+                    product.setPrice(Double.parseDouble(request.getParameter("price")));
 
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("products", productDAO.read());
-                request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("products", productDAO.read());
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/product/read.jsp";
                 break;
             case "delete":
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("products", productDAO.read());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("products", productDAO.read());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/product/delete.jsp";
                 break;
             case "delete.confirm":
-                /* CRIA OBJETO */
-                product = productDAO.readById(Long.parseLong(request.getParameter("products")));
+                try {
+                    /* CRIA OBJETO */
+                    product = productDAO.readById(Long.parseLong(request.getParameter("products")));
 
-                /* PERSITE O OBJETO NO BANCO */
-                productDAO.delete(product);
+                    /* PERSITE O OBJETO NO BANCO */
+                    productDAO.delete(product);
 
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("products", productDAO.read());
-                request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("products", productDAO.read());
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.GENERIC_DELETE_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/product/read.jsp";
@@ -142,10 +222,10 @@ public class ProductCommand implements Command {
         } catch (Exception ex) {
             /* LOG DO SISTEMA */
             producerBean.sendMessage(LogEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* "SETA" ATRIBUTOS */
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* REDIRECIONA PARA PÁGINA DESEJADA */
             returnPage = "index.jsp";
         }

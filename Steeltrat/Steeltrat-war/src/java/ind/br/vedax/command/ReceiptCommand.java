@@ -5,6 +5,7 @@ import ind.br.vedax.enums.ReturnMsgEnum;
 import ind.br.vedax.jms.ProducerBean;
 import ind.br.vedax.model.dao.ClientDAO;
 import ind.br.vedax.model.dao.ReceiptDAO;
+import ind.br.vedax.model.entities.Employee;
 import ind.br.vedax.model.entities.Receipt;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,11 +19,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class ReceiptCommand implements Command {
+
     ProducerBean producerBean = lookupProducerBeanBean();
 
     ReceiptDAO receiptDAO = lookupReceiptDAOBean();
     ClientDAO clientDAO = lookupClientDAOBean();
-    
+
     private final String forLog = "Recebimento";
     private EntityManagerFactory emf;
     private EntityManager em;
@@ -48,88 +50,179 @@ public class ReceiptCommand implements Command {
         } catch (Exception ex) {
             /* LOG DO SISTEMA */
             producerBean.sendMessage(LogEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* "SETA" ATRIBUTOS */
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* REDIRECIONA PARA PÁGINA DESEJADA */
             returnPage = "index.jsp";
             return;
         }
-        
+
         /* INICIO LÓGICA */
         String action = request.getParameter("action");
         Receipt receipt = new Receipt();
         switch (action) {
             case "insert":
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("clients", clientDAO.read());
-                request.getSession().setAttribute("number_receipt", receiptDAO.lastNumber());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("clients", clientDAO.read());
+                    request.getSession().setAttribute("number_receipt", receiptDAO.lastNumber());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/receipt/insert.jsp";
                 break;
             case "insert.confirm":
-                /* VARIÁVEIS DO FORM */
-                receipt.setIdClient(clientDAO.readById(Long.parseLong(request.getParameter("clients"))));
+                try {
+                    /* VARIÁVEIS DO FORM */
+                    receipt.setIdClient(clientDAO.readById(Long.parseLong(request.getParameter("clients"))));
 
-                /* PERSITE O OBJETO NO BANCO */
-                receiptDAO.create(receipt);
+                    /* PERSITE O OBJETO NO BANCO */
+                    receiptDAO.create(receipt);
 
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
-                request.getSession().setAttribute("receipts", receiptDAO.read());
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
+                    request.getSession().setAttribute("receipts", receiptDAO.read());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/receipt/read.jsp";
                 break;
             case "read":
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("receipts", receiptDAO.read());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("receipts", receiptDAO.read());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/receipt/read.jsp";
                 break;
             case "update":
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("clients", clientDAO.read());
-                request.getSession().setAttribute("receipts", receiptDAO.read());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("clients", clientDAO.read());
+                    request.getSession().setAttribute("receipts", receiptDAO.read());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/receipt/update.jsp";
                 break;
             case "updateById":
-                /* CRIA OBJETO */
-                receipt = receiptDAO.readById(Long.parseLong(request.getParameter("receipts")));
+                try {
+                    /* CRIA OBJETO */
+                    receipt = receiptDAO.readById(Long.parseLong(request.getParameter("receipts")));
 
-                /* VARIÁVEIS DO FORM */
-                receipt.setIdClient(clientDAO.readById(Long.parseLong(request.getParameter("clients"))));
+                    /* VARIÁVEIS DO FORM */
+                    receipt.setIdClient(clientDAO.readById(Long.parseLong(request.getParameter("clients"))));
 
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("receipts", receiptDAO.read());
-                request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("receipts", receiptDAO.read());
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/receipt/read.jsp";
                 break;
             case "delete":
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("clients", clientDAO.read());
-                request.getSession().setAttribute("receipts", receiptDAO.read());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("clients", clientDAO.read());
+                    request.getSession().setAttribute("receipts", receiptDAO.read());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/receipt/delete.jsp";
                 break;
             case "delete.confirm":
-                /* CRIA OBJETO */
-                receipt = receiptDAO.readById(Long.parseLong(request.getParameter("receipts")));
+                try {
+                    /* CRIA OBJETO */
+                    receipt = receiptDAO.readById(Long.parseLong(request.getParameter("receipts")));
 
-                /* PERSITE O OBJETO NO BANCO */
-                receiptDAO.delete(receipt);
+                    /* PERSITE O OBJETO NO BANCO */
+                    receiptDAO.delete(receipt);
 
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("receipts", receiptDAO.read());
-                request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("receipts", receiptDAO.read());
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
+
+                } catch (Exception ex) {
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CONNECT_ERROR_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.GENERIC_DELETE_MESSAGE.toString());
+
+                    /* REDIRECIONA PARA PÁGINA DESEJADA */
+                    returnPage = "WEB-INF/jsp/home.jsp";
+                    break;
+                }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/receipt/read.jsp";
@@ -149,10 +242,10 @@ public class ReceiptCommand implements Command {
         } catch (Exception ex) {
             /* LOG DO SISTEMA */
             producerBean.sendMessage(LogEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* "SETA" ATRIBUTOS */
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* REDIRECIONA PARA PÁGINA DESEJADA */
             returnPage = "index.jsp";
         }
