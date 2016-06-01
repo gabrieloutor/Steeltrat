@@ -204,7 +204,9 @@ input[type="button"]:active {
 @import url("http://fonts.googleapis.com/css?family=Montserrat:300,400,700");
 .rwd-table {
     margin: 1em 0;
-    min-width: 300px;
+    width: 100%;
+    overflow: scroll;
+    display: block;
 }
 .rwd-table tr {
     border-top: 1px solid #ddd;
@@ -248,11 +250,15 @@ input[type="button"]:active {
         padding-right: 0;
     }
 }
+
 .rwd-table {
-    background: #34495E;
+    background: #007cd2;
     color: #fff;
     border-radius: .4em;
-    overflow: hidden;
+    box-shadow: 0 0 6px #000; 
+}
+.rwd-table:hover{
+    box-shadow: 0 0 12px #000;
 }
 .rwd-table tr {
     border-color: #46637f;
@@ -266,5 +272,5 @@ input[type="button"]:active {
     }
 }
 .rwd-table th, .rwd-table td:before {
-    color: #dd5;
+    color: #130909;
 }
