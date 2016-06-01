@@ -26,7 +26,7 @@ public class FrontController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("text/html;charset=ISO-8859-1");
         try (PrintWriter out = response.getWriter()) {
             String commandStr = request.getParameter("command");
             try {
