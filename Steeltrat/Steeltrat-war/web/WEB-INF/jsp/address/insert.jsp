@@ -15,8 +15,9 @@
         <h3>Inserir Endereço</h3>
         <form method="POST" id="formInsert" action="home" >
             <label for="zipcode">C.E.P.:</label> <input type="text" name="zipcode" id="zipcode" onchange="myFunctionTwo()" size="12" maxlength="8" onkeypress="return alpha(event,numbers)">
+            * Utilizar apenas números. Exemplo: 06474050
             <br>
-            <label for="number_address">Número do Endereço:</label> <input type="number" readonly name="number_address" id="number_address" size="10" max="3" onkeypress="return alpha(event,numbers)">
+            <label for="number_address">Número do Endereço:</label> <input type="text" readonly name="number_address" id="number_address" size="10" maxlength="6" onkeypress="return alpha(event,numbers)">
             <br>
             <input type="hidden" name="command" value="Address">
             <input type="hidden" name="action" value="insert.confirm">

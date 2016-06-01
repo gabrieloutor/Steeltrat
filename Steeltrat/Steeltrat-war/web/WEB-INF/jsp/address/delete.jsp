@@ -18,7 +18,7 @@
                 <option value="">&#45;&#45; Selecione um C.E.P. &#45;&#45;</option>
                 <c:forEach var="address" items="${addresses}">
                     <option value="${address.idAddress}">
-                        <c:out value="${address.zipcode}" />
+                        <c:out value="${address.getFormattedZipcode()} / ${address.numberAddress}" />
                     </option>
                 </c:forEach>
             </select>

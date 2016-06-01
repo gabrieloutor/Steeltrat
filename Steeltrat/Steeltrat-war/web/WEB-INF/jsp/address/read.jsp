@@ -21,7 +21,7 @@
             <c:forEach items="${addresses}" var="address" varStatus="i">
                 <tr>
                     <td>${address.idAddress}</td>
-                    <td>${address.zipcode.substring(0,5)}-${address.zipcode.substring(5,8)}</td>
+                    <td>${address.getFormattedZipcode()}</td>
                     <td>${address.numberAddress}</td>
                 </tr>
             </c:forEach>

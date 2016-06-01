@@ -24,8 +24,8 @@
                 <tr>
                     <td>${client.idClient}</td>
                     <td>${client.nameClient}</td>
-                    <td>${client.telephone}</td>
-                    <td>${client.idAddress.zipcode.substring(0,5)}-${client.idAddress.zipcode.substring(5,8)} / ${client.idAddress.numberAddress}</td>
+                    <td>+${client.telephone.toString().substring(0,2)} (${client.telephone.toString().substring(2,4)}) ${client.telephone.toString().substring(4,8)}-${client.telephone.toString().substring(8)}</td>
+                    <td>${client.idAddress.getFormattedZipcode()} / ${client.idAddress.numberAddress}</td>
                     <td><a href="home?command=Client&action=route&zipcode=${client.idAddress.zipcode}" >Traçar Rota</a></td>
                 </tr>
             </c:forEach>

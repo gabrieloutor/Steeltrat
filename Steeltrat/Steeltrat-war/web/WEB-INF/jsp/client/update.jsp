@@ -7,6 +7,7 @@
         <title>Steeltrat | Cliente - Atualizar</title>
         <link rel="icon" href="img/favicon.ico" />
         <link href='css/home.css' rel='stylesheet'>
+        <script src="js/validation.js" type="text/javascript"></script>
     </head>
     <body>
         <%@include file="../section.jspf" %>
@@ -23,16 +24,17 @@
                 </c:forEach>
             </select>
             <br>
-            <label for="name_client">Novo name do Cliente: </label> <input type="text" readonly id="name_client" name="name_client" size="60" maxlength="60">
+            <label for="name_client">Novo nome do Cliente: </label> <input type="text" readonly id="name_client" name="name_client" size="60" maxlength="60" onkeypress="return alpha(event,letters)">
             <br>
-            <label for="telephone_client">Telefone:</label> <input type="number" readonly name="telephone_client" id="telephone_client" size="19" maxlength="19">
+            <label for="telephone_client">Telefone:</label> <input type="text" readonly name="telephone_client" id="telephone_client" size="19" maxlength="19" onkeypress="return alpha(event,numbers)">
+            * Utilizar apenas números. Exemplo: 551142087181
             <br>
             <label for="addresses">Endereços:&nbsp;</label>
             <select name="addresses" id="addresses" disabled>
                 <option value="">&#45;&#45; Selecione um C.E.P. &#45;&#45;</option>
                 <c:forEach var="address" items="${addresses}">
                     <option value="${address.idAddress}">
-                        <c:out value="${address.zipcode}" />
+                        <c:out value="${address.getFormattedZipcode()}" />
                     </option>
                 </c:forEach>
             </select>

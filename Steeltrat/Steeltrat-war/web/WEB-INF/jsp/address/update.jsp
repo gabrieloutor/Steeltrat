@@ -19,14 +19,15 @@
                 <option value="">&#45;&#45; Selecione um C.E.P. &#45;&#45;</option>
                 <c:forEach var="address" items="${addresses}">
                     <option value="${address.idAddress}">
-                        <c:out value="${address.zipcode}" />
+                        <c:out value="${address.getFormattedZipcode()} / ${address.numberAddress}" />
                     </option>
                 </c:forEach>
             </select>
             <br>
             <label for="zipcode">Novo C.E.P. do Endereço </label> <input type="text" readonly id="zipcode" name="zipcode" size="8" maxlength="8" onkeypress="return alpha(event,numbers)">
+            * Utilizar apenas números. Exemplo: 06474050
             <br>
-            <label for="number_address">Número do Endereço</label> <input type="number" readonly name="number_address" id="number_address" size="10" maxlength="10" onkeypress="return alpha(event,numbers)">
+            <label for="number_address">Número do Endereço</label> <input type="text" readonly name="number_address" id="number_address" size="10" maxlength="6" onkeypress="return alpha(event,numbers)">
             <br>
             <input type="hidden" name="command" value="Address">
             <input type="hidden" name="action" value="updateById">
