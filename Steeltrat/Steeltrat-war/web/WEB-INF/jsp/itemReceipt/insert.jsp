@@ -7,6 +7,7 @@
         <title>Steeltrat | Item Recebimento - Inserir</title>
         <link rel="icon" href="img/favicon.ico" />
         <link href="css/home.css" rel="stylesheet" type="text/css"/>
+        <script src="js/validation.js" type="text/javascript"></script>
     </head>
     <body>
         <%@include file="../section.jspf" %>
@@ -27,13 +28,13 @@
             <br>
             <label for="order_client">Pedido Cliente:</label> <input type="text" readonly name="order_client" id="order_client" size="25" maxlength="25">
             <br>
-            <label for="amount_piece">Quantidade de Peças:</label> <input type="number" readonly name="amount_piece" id="amount_piece" size="10" maxlength="10">
+            <label for="amount_piece">Quantidade de Peças:</label> <input type="text" readonly name="amount_piece" id="amount_piece" size="10" maxlength="5" onkeypress="return alpha(event,numbers)">
             <br>
-            <label for="amount_specimen">Quantidade de Corpo de Prova:</label> <input type="number" readonly name="amount_specimen" id="amount_specimen" size="10" maxlength="10">
+            <label for="amount_specimen">Quantidade de Corpo de Prova:</label> <input type="text" readonly name="amount_specimen" id="amount_specimen" size="10" maxlength="5" onkeypress="return alpha(event,numbers)">
             <br>
-            <label for="weight">Peso: </label> <input type="number" readonly name="weight" id="weight" size="10" maxlength="10">
+            <label for="weight">Peso: </label> <input type="text" readonly name="weight" id="weight" size="10" maxlength="5" onkeypress="return alpha(event,weight)">
             <br>
-            <label for="number_transport">Corrida:</label> <input type="number" readonly name="number_transport" id="number_transport" size="10" maxlength="10">
+            <label for="number_transport">Corrida:</label> <input type="text" readonly name="number_transport" id="number_transport" size="10" maxlength="5" onkeypress="return alpha(event,numbers)">
             <br>
             <label for="product">Produto:</label>
             <select name="products" id="products" disabled>

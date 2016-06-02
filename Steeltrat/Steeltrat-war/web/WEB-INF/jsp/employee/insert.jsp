@@ -16,7 +16,7 @@
         <form method="POST" id="formInsert" action="home">
             <label for="name_employee">Nome:</label> <input type="text" name="name_employee" id="name_employee" onchange="myFunctionTwo()" size="35" maxlength="35" onkeypress="return alpha(event,letters)">
             <br>
-            <label for="cpf_employee">Cpf:</label> <input type="text" readonly name="cpf_employee" id="cpf_employee" size="11" maxlength="11" onkeypress="return alpha(event,numbers)">
+            <label for="cpf_employee">C.P.F.:</label> <input type="text" readonly name="cpf_employee" id="cpf_employee" size="11" maxlength="11" onkeypress="return alpha(event,numbers)">
             <br>
             <label for="position">Cargo: </label>
             <select name="positions" id="positions" disabled>
@@ -70,7 +70,7 @@
                         break;
                     case cpf_employee.value === "" || cpf_employee.value.length < 11:
                         cpf_employee.focus();
-                        alert("Digite o CPF do Funcionário");
+                        alert("C.P.F. inválido");
                         break;
                     case position.value === "":
                         position.focus();

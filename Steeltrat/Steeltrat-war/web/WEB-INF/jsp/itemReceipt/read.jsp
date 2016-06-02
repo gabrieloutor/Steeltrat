@@ -53,10 +53,10 @@
                     <td data-th="CLIENTE">${itemReceipt.idReceipt.idClient.nameClient}</td>
                     <td data-th="NF CLIENTE">${itemReceipt.nfClient}</td>
                     <td data-th="PEDIDO CLIENTE">${itemReceipt.orderClient}</td>
-                    <td data-th="QTD PECA">${itemReceipt.amountPiece}</td>
-                    <td data-th="QTD C.P.">${itemReceipt.amountSpecimen}</td>
-                    <td data-th="PESO">${itemReceipt.weight}</td>
-                    <td data-th="CORRIDA">${itemReceipt.numberTransport}</td>
+                    <td data-th="QTD PECA">${itemReceipt.getFormattedAmountPiece()}</td>
+                    <td data-th="QTD C.P.">${itemReceipt.getFormattedAmountSpecimen()}</td>
+                    <td data-th="PESO">${itemReceipt.getFormattedWeight()}</td>
+                    <td data-th="CORRIDA">${itemReceipt.getFormattedNumberTransport()}</td>
                     <td data-th="PRODUTO">${itemReceipt.idProduct.descriptionProduct}</td>
                     <td data-th="MATERIAL">${itemReceipt.idMaterial.nameMaterial}</td>
                     <td data-th="NORMA">${itemReceipt.idStandard.nameStandard}</td>

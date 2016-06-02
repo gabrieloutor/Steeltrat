@@ -26,7 +26,7 @@
             <br>
             <label for="name_client">Novo nome do Cliente: </label> <input type="text" readonly id="name_client" name="name_client" size="60" maxlength="60" onkeypress="return alpha(event,letters)">
             <br>
-            <label for="telephone_client">Telefone:</label> <input type="text" readonly name="telephone_client" id="telephone_client" size="19" maxlength="19" onkeypress="return alpha(event,numbers)">
+            <label for="telephone_client">Telefone:</label> <input type="text" readonly name="telephone_client" id="telephone_client" size="15" maxlength="12" onkeypress="return alpha(event,numbers)">
             * Utilizar apenas números. Exemplo: 551142087181
             <br>
             <label for="addresses">Endereços:&nbsp;</label>
@@ -88,9 +88,9 @@
                         name_client.focus();
                         alert("Digite o Nome do Cliente");
                         break;
-                    case telephone_client.value === "":
+                    case telephone_client.value === "" || telephone_client.value.length !== 12:
                         telephone_client.focus();
-                        alert("Digite o Telefone do Cliente");
+                        alert("Telefone inválido");
                         break;
                     default:
                         formUpdate.submit();

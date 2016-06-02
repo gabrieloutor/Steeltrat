@@ -22,7 +22,7 @@
                 <tr>
                     <td data-th="ID">${product.idProduct}</td>
                     <td data-th="NOME">${product.descriptionProduct}</td>
-                    <td data-th="PREÇO">R$&nbsp;&nbsp;&nbsp;${product.price}</td>
+                    <td data-th="PREÇO">${product.getFormattedPrice()}</td>
                 </tr>
             </c:forEach>
         </table>

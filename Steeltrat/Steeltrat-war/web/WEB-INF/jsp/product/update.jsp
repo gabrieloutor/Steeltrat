@@ -26,7 +26,7 @@
             <br>
             <label for="description_product">Nova descrição:&nbsp;</label> <input type="text" readonly id="description_product" name="description_product" size="50" maxlength="50">
             <br>
-            <label for="price">Preço do Produto:&nbsp;</label> <input type="number" readonly name="price" id="price" size="10" maxlength="10" onkeypress="return alpha(event,numbers)">
+            <label for="price">Preço do Produto:&nbsp;</label> <input type="text" readonly name="price" id="price" size="10" maxlength="10" onkeypress="return alpha(event,numbers)">
             <br>
             <input type="hidden" name="command" value="Product">
             <input type="hidden" name="action" value="updateById">
