@@ -70,6 +70,15 @@ public class MaterialCommand implements Command {
                     material.setNameMaterial(request.getParameter("name_material"));
                     material.setMarkMaterial(request.getParameter("mark_material"));
 
+                    if ((materialDAO.readByName(material.getNameMaterial())) != null) {
+                        /* "SETA" ATRIBUTOS */
+                        request.getSession().setAttribute("returnMsgError", forLog + ReturnMsgEnum.GENERIC_ERROR_MESSAGE);
+
+                        /* REDIRECIONA PARA PÁGINA DESEJADA */
+                        returnPage = "WEB-INF/jsp/material/insert.jsp";
+                        break;
+                    }
+                    
                     /* PERSITE O OBJETO NO BANCO */
                     materialDAO.create(material);
 

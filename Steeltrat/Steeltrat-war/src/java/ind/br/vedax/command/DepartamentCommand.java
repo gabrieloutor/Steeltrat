@@ -73,7 +73,7 @@ public class DepartamentCommand implements Command {
                         request.getSession().setAttribute("returnMsgError", forLog + ReturnMsgEnum.GENERIC_ERROR_MESSAGE);
 
                         /* REDIRECIONA PARA PÁGINA DESEJADA */
-                        returnPage = "WEB-INF/jsp/address/insert.jsp";
+                        returnPage = "WEB-INF/jsp/departament/insert.jsp";
                         break;
                     }
 
@@ -152,7 +152,7 @@ public class DepartamentCommand implements Command {
                         request.getSession().setAttribute("returnMsgError", forLog + ReturnMsgEnum.GENERIC_ERROR_MESSAGE);
 
                         /* REDIRECIONA PARA PÁGINA DESEJADA */
-                        returnPage = "WEB-INF/jsp/address/update.jsp";
+                        returnPage = "WEB-INF/jsp/departament/update.jsp";
                         break;
                     }
 

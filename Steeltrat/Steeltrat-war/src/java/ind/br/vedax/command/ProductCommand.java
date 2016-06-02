@@ -70,6 +70,15 @@ public class ProductCommand implements Command {
                     product.setDescriptionProduct(request.getParameter("description_product"));
                     product.setPrice(Double.parseDouble(request.getParameter("price")));
 
+                    if ((productDAO.readByDescription(product.getDescriptionProduct())) != null) {
+                        /* "SETA" ATRIBUTOS */
+                        request.getSession().setAttribute("returnMsgError", forLog + ReturnMsgEnum.GENERIC_ERROR_MESSAGE);
+
+                        /* REDIRECIONA PARA PÁGINA DESEJADA */
+                        returnPage = "WEB-INF/jsp/product/insert.jsp";
+                        break;
+                    }
+                    
                     /* PERSITE O OBJETO NO BANCO */
                     productDAO.create(product);
 

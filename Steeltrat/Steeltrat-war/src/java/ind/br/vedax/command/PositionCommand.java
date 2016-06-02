@@ -69,6 +69,15 @@ public class PositionCommand implements Command {
                     /* VARIÁVEIS DO FORM */
                     position.setNamePosition(request.getParameter("name_position"));
 
+                    if ((positionSteeltratDAO.readByName(position.getNamePosition())) != null) {
+                        /* "SETA" ATRIBUTOS */
+                        request.getSession().setAttribute("returnMsgError", forLog + ReturnMsgEnum.GENERIC_ERROR_MESSAGE);
+
+                        /* REDIRECIONA PARA PÁGINA DESEJADA */
+                        returnPage = "WEB-INF/jsp/position/insert.jsp";
+                        break;
+                    }
+                    
                     /* PERSITE O OBJETO NO BANCO */
                     positionSteeltratDAO.create(position);
 

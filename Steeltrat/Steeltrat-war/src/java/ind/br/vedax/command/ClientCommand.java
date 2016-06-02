@@ -164,7 +164,7 @@ public class ClientCommand implements Command {
                         request.getSession().setAttribute("returnMsgError", forLog + ReturnMsgEnum.GENERIC_ERROR_MESSAGE);
 
                         /* REDIRECIONA PARA PÁGINA DESEJADA */
-                        returnPage = "WEB-INF/jsp/client/insert.jsp";
+                        returnPage = "WEB-INF/jsp/client/update.jsp";
                         break;
                     }
                     

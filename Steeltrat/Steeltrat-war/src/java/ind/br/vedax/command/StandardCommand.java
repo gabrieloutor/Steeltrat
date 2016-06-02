@@ -70,6 +70,15 @@ public class StandardCommand implements Command {
                     standard.setNameStandard(request.getParameter("name_standard"));
                     standard.setMarkStandard(request.getParameter("mark_standard"));
 
+                    if ((standardDAO.readByName(standard.getNameStandard())) != null) {
+                        /* "SETA" ATRIBUTOS */
+                        request.getSession().setAttribute("returnMsgError", forLog + ReturnMsgEnum.GENERIC_ERROR_MESSAGE);
+
+                        /* REDIRECIONA PARA PÁGINA DESEJADA */
+                        returnPage = "WEB-INF/jsp/standard/insert.jsp";
+                        break;
+                    }
+                    
                     /* PERSITE O OBJETO NO BANCO */
                     standardDAO.create(standard);
 
