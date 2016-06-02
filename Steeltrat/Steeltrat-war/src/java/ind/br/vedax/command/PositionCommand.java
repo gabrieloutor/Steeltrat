@@ -148,6 +148,15 @@ public class PositionCommand implements Command {
                     /* CRIA OBJETO */
                     position = positionSteeltratDAO.readById(Long.parseLong(request.getParameter("positions")));
 
+                    if ((positionSteeltratDAO.readByName(request.getParameter("name_position"))) != null) {
+                        /* "SETA" ATRIBUTOS */
+                        request.getSession().setAttribute("returnMsgError", forLog + ReturnMsgEnum.GENERIC_ERROR_MESSAGE);
+
+                        /* REDIRECIONA PARA PÁGINA DESEJADA */
+                        returnPage = "WEB-INF/jsp/position/update.jsp";
+                        break;
+                    }
+                    
                     /* PERSITE O OBJETO NO BANCO */
                     position.setNamePosition(request.getParameter("name_position"));
 

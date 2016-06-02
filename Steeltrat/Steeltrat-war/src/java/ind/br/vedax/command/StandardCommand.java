@@ -149,6 +149,15 @@ public class StandardCommand implements Command {
                     /* CRIA OBJETO */
                     standard = standardDAO.readById(Long.parseLong(request.getParameter("standards")));
 
+                    if (!standard.getNameStandard().equals(request.getParameter("name_standard")) && (standardDAO.readByName(request.getParameter("name_standard"))) != null) {
+                        /* "SETA" ATRIBUTOS */
+                        request.getSession().setAttribute("returnMsgError", forLog + ReturnMsgEnum.GENERIC_ERROR_MESSAGE);
+
+                        /* REDIRECIONA PARA PÁGINA DESEJADA */
+                        returnPage = "WEB-INF/jsp/material/update.jsp";
+                        break;
+                    }
+                    
                     /* VARIÁVEIS DO FORM */
                     standard.setNameStandard(request.getParameter("name_standard"));
                     standard.setMarkStandard(request.getParameter("mark_standard"));

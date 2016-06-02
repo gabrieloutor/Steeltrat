@@ -149,6 +149,15 @@ public class ProductCommand implements Command {
                     /* CRIA OBJETO */
                     product = productDAO.readById(Long.parseLong(request.getParameter("products")));
 
+                    if (!product.getDescriptionProduct().equals(request.getParameter("description_product")) && (productDAO.readByDescription(request.getParameter("description_product"))) != null) {
+                        /* "SETA" ATRIBUTOS */
+                        request.getSession().setAttribute("returnMsgError", forLog + ReturnMsgEnum.GENERIC_ERROR_MESSAGE);
+
+                        /* REDIRECIONA PARA PÁGINA DESEJADA */
+                        returnPage = "WEB-INF/jsp/product/update.jsp";
+                        break;
+                    }
+                    
                     /* VARIÁVEIS DO FORM */
                     product.setDescriptionProduct(request.getParameter("description_product"));
                     product.setPrice(Double.parseDouble(request.getParameter("price")));

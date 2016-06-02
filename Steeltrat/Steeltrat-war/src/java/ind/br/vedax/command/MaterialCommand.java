@@ -149,6 +149,15 @@ public class MaterialCommand implements Command {
                     /* CRIA OBJETO */
                     material = materialDAO.readById(Long.parseLong(request.getParameter("materials")));
 
+                    if (!material.getNameMaterial().equals(request.getParameter("name_material")) && (materialDAO.readByName(request.getParameter("name_material"))) != null) {
+                        /* "SETA" ATRIBUTOS */
+                        request.getSession().setAttribute("returnMsgError", forLog + ReturnMsgEnum.GENERIC_ERROR_MESSAGE);
+
+                        /* REDIRECIONA PARA PÁGINA DESEJADA */
+                        returnPage = "WEB-INF/jsp/material/update.jsp";
+                        break;
+                    }
+                    
                     /* VARIÁVEIS DO FORM */
                     material.setNameMaterial(request.getParameter("name_material"));
                     material.setMarkMaterial(request.getParameter("mark_material"));
