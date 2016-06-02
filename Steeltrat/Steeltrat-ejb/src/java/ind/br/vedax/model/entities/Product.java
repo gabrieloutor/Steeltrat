@@ -1,6 +1,7 @@
 package ind.br.vedax.model.entities;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -69,6 +70,10 @@ public class Product implements Serializable {
 
     public Double getPrice() {
         return price;
+    }
+    
+    public String getFormattedPrice(){
+        return NumberFormat.getCurrencyInstance().format(price);
     }
 
     public void setPrice(Double price) {

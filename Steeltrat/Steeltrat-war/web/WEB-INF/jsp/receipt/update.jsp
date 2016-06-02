@@ -27,7 +27,7 @@
             <select name="clients" id="clients" disabled>
                 <option value="">--Selecione o Cliente--</option>
                 <c:forEach var="client" items="${clients}">
-                    <option value="${client.id_client}">
+                    <option value="${client.idClient}">
                         <c:out value="${client.nameClient}" />
                     </option>
                 </c:forEach>
@@ -47,7 +47,7 @@
                 if (mySelect.value !== "") {
             <c:forEach items="${receipts}" var="receipt" varStatus="status">
                     if (mySelect.value === "${receipt.idReceipt}") {
-                        clients.value = "${receipt.idClient.id_client}";
+                        clients.value = "${receipt.idClient.idClient}";
                         clients.removeAttribute("disabled");
                     }
             </c:forEach>

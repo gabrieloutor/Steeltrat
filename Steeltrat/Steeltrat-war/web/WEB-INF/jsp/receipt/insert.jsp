@@ -19,7 +19,7 @@
             <select name="clients" id="clients">
                 <option value="">--Selecione o Cliente--</option>
                 <c:forEach var="client" items="${clients}">
-                    <option value="${client.id_client}">
+                    <option value="${client.idClient}">
                         <c:out value="${client.nameClient}" />
                     </option>
                 </c:forEach>

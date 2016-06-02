@@ -3,6 +3,8 @@ package ind.br.vedax.model.entities;
 import java.io.Serializable;
 import java.util.Date;
 import ind.br.vedax.util.DateUtil;
+import ind.br.vedax.util.DecimalUtil;
+import java.text.DecimalFormat;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,6 +41,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ItemsReceipt.findByMarkItemReceipt", query = "SELECT i FROM ItemsReceipt i WHERE i.markItemReceipt = :markItemReceipt"),
     @NamedQuery(name = "ItemsReceipt.findByDateItemReceipt", query = "SELECT i FROM ItemsReceipt i WHERE i.dateItemReceipt = :dateItemReceipt")})
 public class ItemsReceipt implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -117,12 +120,20 @@ public class ItemsReceipt implements Serializable {
         return amountPiece;
     }
 
+    public String getFormattedAmountPiece() {
+        return DecimalUtil.integerToDecimal(amountPiece);
+    }
+
     public void setAmountPiece(Integer amountPiece) {
         this.amountPiece = amountPiece;
     }
 
     public Integer getAmountSpecimen() {
         return amountSpecimen;
+    }
+    
+    public String getFormattedAmountSpecimen() {
+        return DecimalUtil.integerToDecimal(amountSpecimen);
     }
 
     public void setAmountSpecimen(Integer amountSpecimen) {
@@ -131,6 +142,10 @@ public class ItemsReceipt implements Serializable {
 
     public Double getWeight() {
         return weight;
+    }
+    
+    public String getFormattedWeight() {
+        return DecimalUtil.doubleToDecimal(weight);
     }
 
     public void setWeight(Double weight) {
@@ -141,6 +156,10 @@ public class ItemsReceipt implements Serializable {
         return numberTransport;
     }
 
+    public String getFormattedNumberTransport() {
+        return DecimalUtil.integerToDecimal(numberTransport);
+    }
+    
     public void setNumberTransport(Integer numberTransport) {
         this.numberTransport = numberTransport;
     }
@@ -160,8 +179,8 @@ public class ItemsReceipt implements Serializable {
     public void setDateItemReceipt(Date dateItemReceipt) {
         this.dateItemReceipt = dateItemReceipt;
     }
-    
-    public String getFormattedDate(){
+
+    public String getFormattedDate() {
         return DateUtil.date2String(dateItemReceipt);
     }
 

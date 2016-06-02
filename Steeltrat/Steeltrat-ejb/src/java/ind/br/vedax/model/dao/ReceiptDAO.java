@@ -60,7 +60,7 @@ public class ReceiptDAO implements GenericDAO<Receipt>{
     }
     
     public Long lastNumber(){
-        Long e = Long.parseLong(em.createNamedQuery("Receipt.findLastNumberByIdReceipt", Receipt.class).getSingleResult().toString()+1);
+        Long e = Long.parseLong(em.createNamedQuery("Receipt.findLastNumberByIdReceipt").getSingleResult().toString())+1;
         if (e == null) {
             throw new DBException(DBExceptionEnum.FIND_ERROR);
         }

@@ -7,6 +7,7 @@
         <title>Steeltrat | Usuário - Atualizar</title>
         <link rel="icon" href="img/favicon.ico" />
         <link href="css/home.css" rel="stylesheet" type="text/css"/>
+        <script src="js/validation.js" type="text/javascript"></script>
     </head>
     <body>
         <%@include file="../section.jspf" %>
