@@ -230,7 +230,7 @@ public class ReceiptCommand implements Command {
 
                     /* REDIRECIONA PARA PÁGINA DESEJADA */
                     returnPage = "WEB-INF/jsp/home.jsp";
-                    break;
+                    return;
                 }
 
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
