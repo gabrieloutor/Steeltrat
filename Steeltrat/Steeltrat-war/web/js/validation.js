@@ -8,6 +8,7 @@ var numbers='1234567890';
 var signs=',.:;@-\'';
 var mathsigns='+-=()*/';
 var custom='<>#$%&?¿';
+var weight='1234567890.';
 
 function alpha(e,allow) {
      var k;
