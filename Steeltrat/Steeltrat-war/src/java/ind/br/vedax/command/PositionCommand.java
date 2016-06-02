@@ -72,6 +72,9 @@ public class PositionCommand implements Command {
                     /* PERSITE O OBJETO NO BANCO */
                     positionSteeltratDAO.create(position);
 
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CREATE_MESSAGE.toString());
+
                     /* "SETA" ATRIBUTOS */
                     request.getSession().setAttribute("positions", positionSteeltratDAO.read());
                     request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
@@ -139,6 +142,9 @@ public class PositionCommand implements Command {
                     /* PERSITE O OBJETO NO BANCO */
                     position.setNamePosition(request.getParameter("name_position"));
 
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.UPDATE_MESSAGE.toString());
+
                     /* "SETA" ATRIBUTOS */
                     request.getSession().setAttribute("positions", positionSteeltratDAO.read());
                     request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
@@ -185,6 +191,9 @@ public class PositionCommand implements Command {
 
                     /* PERSITE O OBJETO NO BANCO */
                     positionSteeltratDAO.delete(position);
+
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.DELETE_MESSAGE.toString());
 
                     /* "SETA" ATRIBUTOS */
                     request.getSession().setAttribute("positions", positionSteeltratDAO.read());

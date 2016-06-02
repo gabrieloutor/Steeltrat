@@ -18,10 +18,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class StandardCommand implements Command {
+
     ProducerBean producerBean = lookupProducerBeanBean();
 
     StandardDAO standardDAO = lookupStandardDAOBean();
-    
+
     private final String forLog = "Norma";
     private EntityManagerFactory emf;
     private EntityManager em;
@@ -46,15 +47,15 @@ public class StandardCommand implements Command {
         } catch (Exception ex) {
             /* LOG DO SISTEMA */
             producerBean.sendMessage(LogEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* "SETA" ATRIBUTOS */
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* REDIRECIONA PARA PÁGINA DESEJADA */
             returnPage = "index.jsp";
             return;
         }
-        
+
         /* INICIO LÓGICA */
         String action = request.getParameter("action");
         Standard standard = new Standard();
@@ -64,17 +65,20 @@ public class StandardCommand implements Command {
                 returnPage = "WEB-INF/jsp/standard/insert.jsp";
                 break;
             case "insert.confirm":
-                try{
-                /* VARIÁVEIS DO FORM */
-                standard.setNameStandard(request.getParameter("name_standard"));
-                standard.setMarkStandard(request.getParameter("mark_standard"));
+                try {
+                    /* VARIÁVEIS DO FORM */
+                    standard.setNameStandard(request.getParameter("name_standard"));
+                    standard.setMarkStandard(request.getParameter("mark_standard"));
 
-                /* PERSITE O OBJETO NO BANCO */
-                standardDAO.create(standard);
+                    /* PERSITE O OBJETO NO BANCO */
+                    standardDAO.create(standard);
 
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("standards", standardDAO.read());
-                request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CREATE_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("standards", standardDAO.read());
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
 
                 } catch (Exception ex) {
                     /* LOG DO SISTEMA */
@@ -87,14 +91,14 @@ public class StandardCommand implements Command {
                     returnPage = "WEB-INF/jsp/home.jsp";
                     break;
                 }
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/standard/read.jsp";
                 break;
             case "read":
-                try{
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("standards", standardDAO.read());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("standards", standardDAO.read());
 
                 } catch (Exception ex) {
                     /* LOG DO SISTEMA */
@@ -107,14 +111,14 @@ public class StandardCommand implements Command {
                     returnPage = "WEB-INF/jsp/home.jsp";
                     break;
                 }
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/standard/read.jsp";
                 break;
             case "update":
-                try{
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("standards", standardDAO.read());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("standards", standardDAO.read());
 
                 } catch (Exception ex) {
                     /* LOG DO SISTEMA */
@@ -127,22 +131,25 @@ public class StandardCommand implements Command {
                     returnPage = "WEB-INF/jsp/home.jsp";
                     break;
                 }
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/standard/update.jsp";
                 break;
             case "updateById":
-                try{
-                /* CRIA OBJETO */
-                standard = standardDAO.readById(Long.parseLong(request.getParameter("standards")));
+                try {
+                    /* CRIA OBJETO */
+                    standard = standardDAO.readById(Long.parseLong(request.getParameter("standards")));
 
-                /* VARIÁVEIS DO FORM */
-                standard.setNameStandard(request.getParameter("name_standard"));
-                standard.setMarkStandard(request.getParameter("mark_standard"));
+                    /* VARIÁVEIS DO FORM */
+                    standard.setNameStandard(request.getParameter("name_standard"));
+                    standard.setMarkStandard(request.getParameter("mark_standard"));
 
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("standards", standardDAO.read());
-                request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.UPDATE_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("standards", standardDAO.read());
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
 
                 } catch (Exception ex) {
                     /* LOG DO SISTEMA */
@@ -155,14 +162,14 @@ public class StandardCommand implements Command {
                     returnPage = "WEB-INF/jsp/home.jsp";
                     break;
                 }
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/standard/read.jsp";
                 break;
             case "delete":
-                try{
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("standards", standardDAO.read());
+                try {
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("standards", standardDAO.read());
 
                 } catch (Exception ex) {
                     /* LOG DO SISTEMA */
@@ -175,21 +182,24 @@ public class StandardCommand implements Command {
                     returnPage = "WEB-INF/jsp/home.jsp";
                     break;
                 }
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/standard/delete.jsp";
                 break;
             case "delete.confirm":
-                try{
-                /* CRIA OBJETO */
-                standard = standardDAO.readById(Long.parseLong(request.getParameter("standards")));
+                try {
+                    /* CRIA OBJETO */
+                    standard = standardDAO.readById(Long.parseLong(request.getParameter("standards")));
 
-                /* PERSITE O OBJETO NO BANCO */
-                standardDAO.delete(standard);
+                    /* PERSITE O OBJETO NO BANCO */
+                    standardDAO.delete(standard);
 
-                /* "SETA" ATRIBUTOS */
-                request.getSession().setAttribute("standards", standardDAO.read());
-                request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.DELETE_MESSAGE.toString());
+
+                    /* "SETA" ATRIBUTOS */
+                    request.getSession().setAttribute("standards", standardDAO.read());
+                    request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.DELETE_MESSAGE.toString());
 
                 } catch (Exception ex) {
                     /* LOG DO SISTEMA */
@@ -202,7 +212,7 @@ public class StandardCommand implements Command {
                     returnPage = "WEB-INF/jsp/home.jsp";
                     break;
                 }
-                
+
                 /* REDIRECIONA PARA PÁGINA DESEJADA */
                 returnPage = "WEB-INF/jsp/standard/read.jsp";
                 break;
@@ -221,10 +231,10 @@ public class StandardCommand implements Command {
         } catch (Exception ex) {
             /* LOG DO SISTEMA */
             producerBean.sendMessage(LogEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* "SETA" ATRIBUTOS */
             request.getSession().setAttribute("returnMsgError", ReturnMsgEnum.CONNECT_ERROR_MESSAGE.toString());
-            
+
             /* REDIRECIONA PARA PÁGINA DESEJADA */
             returnPage = "index.jsp";
         }

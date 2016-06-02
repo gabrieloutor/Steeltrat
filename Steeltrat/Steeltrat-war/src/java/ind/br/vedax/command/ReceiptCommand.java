@@ -92,6 +92,9 @@ public class ReceiptCommand implements Command {
                     /* PERSITE O OBJETO NO BANCO */
                     receiptDAO.create(receipt);
 
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CREATE_MESSAGE.toString());
+
                     /* "SETA" ATRIBUTOS */
                     request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
                     request.getSession().setAttribute("receipts", receiptDAO.read());
@@ -160,6 +163,9 @@ public class ReceiptCommand implements Command {
                     /* VARIÁVEIS DO FORM */
                     receipt.setIdClient(clientDAO.readById(Long.parseLong(request.getParameter("clients"))));
 
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.UPDATE_MESSAGE.toString());
+
                     /* "SETA" ATRIBUTOS */
                     request.getSession().setAttribute("receipts", receiptDAO.read());
                     request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
@@ -207,6 +213,9 @@ public class ReceiptCommand implements Command {
 
                     /* PERSITE O OBJETO NO BANCO */
                     receiptDAO.delete(receipt);
+
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.DELETE_MESSAGE.toString());
 
                     /* "SETA" ATRIBUTOS */
                     request.getSession().setAttribute("receipts", receiptDAO.read());

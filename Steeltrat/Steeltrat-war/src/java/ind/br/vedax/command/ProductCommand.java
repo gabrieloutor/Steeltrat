@@ -73,6 +73,9 @@ public class ProductCommand implements Command {
                     /* PERSITE O OBJETO NO BANCO */
                     productDAO.create(product);
 
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CREATE_MESSAGE.toString());
+
                     /* "SETA" ATRIBUTOS */
                     request.getSession().setAttribute("products", productDAO.read());
                     request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
@@ -141,6 +144,9 @@ public class ProductCommand implements Command {
                     product.setDescriptionProduct(request.getParameter("description_product"));
                     product.setPrice(Double.parseDouble(request.getParameter("price")));
 
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.UPDATE_MESSAGE.toString());
+
                     /* "SETA" ATRIBUTOS */
                     request.getSession().setAttribute("products", productDAO.read());
                     request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
@@ -187,6 +193,9 @@ public class ProductCommand implements Command {
 
                     /* PERSITE O OBJETO NO BANCO */
                     productDAO.delete(product);
+
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.DELETE_MESSAGE.toString());
 
                     /* "SETA" ATRIBUTOS */
                     request.getSession().setAttribute("products", productDAO.read());

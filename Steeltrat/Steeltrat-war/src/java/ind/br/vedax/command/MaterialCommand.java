@@ -73,6 +73,9 @@ public class MaterialCommand implements Command {
                     /* PERSITE O OBJETO NO BANCO */
                     materialDAO.create(material);
 
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.CREATE_MESSAGE.toString());
+
                     /* "SETA" ATRIBUTOS */
                     request.getSession().setAttribute("materials", materialDAO.read());
                     request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.CREATE_MESSAGE.toString());
@@ -141,6 +144,9 @@ public class MaterialCommand implements Command {
                     material.setNameMaterial(request.getParameter("name_material"));
                     material.setMarkMaterial(request.getParameter("mark_material"));
 
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.UPDATE_MESSAGE.toString());
+
                     /* "SETA" ATRIBUTOS */
                     request.getSession().setAttribute("materials", materialDAO.read());
                     request.getSession().setAttribute("returnMsgSuccessfully", ReturnMsgEnum.UPDATE_MESSAGE.toString());
@@ -187,6 +193,9 @@ public class MaterialCommand implements Command {
 
                     /* PERSITE O OBJETO NO BANCO */
                     materialDAO.delete(material);
+
+                    /* LOG DO SISTEMA */
+                    producerBean.sendMessage(((Employee) request.getSession().getAttribute("employee")).getNameEmployee() + LogEnum.DELETE_MESSAGE.toString());
 
                     /* "SETA" ATRIBUTOS */
                     request.getSession().setAttribute("materials", materialDAO.read());
