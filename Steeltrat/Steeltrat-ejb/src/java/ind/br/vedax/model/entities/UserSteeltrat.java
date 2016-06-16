@@ -69,7 +69,9 @@ public class UserSteeltrat implements Serializable {
         this.username = username;
     }
 
+    @XmlTransient
     public String getPassword() {
+        
         return password;
     }
 
